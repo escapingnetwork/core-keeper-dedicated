@@ -26,6 +26,8 @@ jobs:
       uses: docker/metadata-action@v4.0.1
       with:
         images: arguser/core-keeper-dedicated
+        tags: |
+              type=raw,value=latest
         
     - name: Build and push
       uses: docker/build-push-action@v3
