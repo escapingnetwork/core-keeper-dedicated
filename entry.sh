@@ -17,8 +17,8 @@ cd "${STEAMAPPDIR}"
 
 bash "./_launch.sh" \
 			-world "${WORLD_INDEX}" \
-			-worldname="${WORLD_NAME}" \
-			-worldseed="${WORLD_SEED}" \
-			-gameid="${GAME_ID}" \
-			-datapath="${STEAMAPPDIR}/${DATA_PATH}" \
-			-maxplayers="${MAX_PLAYERS}"
+			-worldname "${WORLD_NAME}" \
+			-worldseed "${WORLD_SEED}" \
+			-gameid "${GAME_ID}" \
+			-datapath "${STEAMAPPDIR}/${DATA_PATH}" \
+			-maxplayers "${MAX_PLAYERS}"
