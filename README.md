@@ -4,9 +4,10 @@
 
 Explore an endless cavern of creatures, relics and resources in a mining sandbox adventure for 1-8 players. Mine, build, fight, craft and farm to unravel the mystery of the ancient Core. [Get Core Keeper at the Steam Store](https://store.steampowered.com/app/1621690/Core_Keeper/)
 
-`APPID 1007`
+[![Docker Image CI](https://github.com/arguser/core-keeper-dedicated/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/arguser/core-keeper-dedicated/actions/workflows/docker-image.yml)
 
-`TOOLID 1963720`
+## Supported tags and respective `Dockerfile` links
+-	[`latest` (*Dockerfile*)](https://github.com/arguser/core-keeper-dedicated/blob/main/Dockerfile)
 
 ## How to run
 
@@ -57,3 +58,6 @@ GAME_ID             Game ID to use for the server. Need to be at least 23 charac
 DATA_PATH           Save file location. If not set it defaults to a sub-folder named "DedicatedServer" at the default Core Keeper save location.
 MAX_PLAYERS         Maximum number of players that will be allowed to connect to server.
 ```
+
+### Support
+https://tallyco.in/leo/
