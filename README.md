@@ -11,11 +11,18 @@ Explore an endless cavern of creatures, relics and resources in a mining sandbox
 
 ## How to run
 
-Using Docker CLI:
+### Volumes
 
-`docker run -d --name core-keeper-dedicated arguser/core-keeper-dedicated`
+Create two directories where you want to run your server :
 
-Using Docker Compose
+- `server-data`: mandatory if you want to keep configuration between each restart
+- `server-files`: optional, contains all the files of the application
+
+### Using Docker CLI:
+
+`docker run -d -e WORLD_NAME="Core Keeper Server" -e MAX_PLAYERS=5 -v $(pwd)/server-data:/home/steam/core-keeper-data --name core-keeper-dedicated arguser/core-keeper-dedicated`
+
+### Using Docker Compose
 Create a `docker-compose.yml` with the following content:
 
 ```
@@ -24,6 +31,9 @@ version: "3"
 services:
   core-keeper:
     image: arguser/core-keeper-dedicated
+    volumes:
+      - ./server-files:/home/steam/core-keeper-dedicated
+      - ./server-data:/home/steam/core-keeper-data
     env_file:
       - ./core.env
     restart: always

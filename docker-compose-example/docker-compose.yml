@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  core-keeper:
+    image: arguser/core-keeper-dedicated
+    env_file:
+      - ./core.env
+    volumes:
+      - ./server-files:/home/steam/core-keeper-dedicated
+      - ./server-data:/home/steam/core-keeper-data
+    restart: always
+    stop_grace_period: 2m

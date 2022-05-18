@@ -9,9 +9,11 @@ ENV STEAMAPPID 1007
 ENV STEAMAPPID_TOOL 1963720
 ENV STEAMAPP core-keeper
 ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
+ENV STEAMAPPDATADIR "${HOMEDIR}/${STEAMAPP}-data"
 ENV DLURL https://raw.githubusercontent.com/arguser/core-keeper-dedicated
 
 COPY ./entry.sh ${HOMEDIR}/entry.sh
+COPY ./launch.sh ${HOMEDIR}/launch.sh
 
 # Install Core Keeper server dependencies and clean up
 RUN set -x \
@@ -19,8 +21,10 @@ RUN set -x \
 	&& apt-get install -y --no-install-recommends --no-install-suggests \
 	xvfb \
 	&& mkdir -p "${STEAMAPPDIR}" \
+	&& mkdir -p "${STEAMAPPDATADIR}" \
 	&& chmod +x "${HOMEDIR}/entry.sh" \
-	&& chown -R "${USER}:${USER}" "${HOMEDIR}/entry.sh" "${STEAMAPPDIR}" \
+	&& chmod +x "${HOMEDIR}/launch.sh" \
+	&& chown -R "${USER}:${USER}" "${HOMEDIR}/entry.sh" "${HOMEDIR}/launch.sh" "${STEAMAPPDIR}" \
 	&& rm -rf /var/lib/apt/lists/*
 
 
