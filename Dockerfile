@@ -19,7 +19,7 @@ COPY ./launch.sh ${HOMEDIR}/launch.sh
 RUN set -x \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --no-install-suggests \
-	xvfb \
+	xvfb mesa-utils \
 	&& mkdir -p "${STEAMAPPDIR}" \
 	&& mkdir -p "${STEAMAPPDATADIR}" \
 	&& chmod +x "${HOMEDIR}/entry.sh" \
