@@ -16,10 +16,12 @@ COPY ./entry.sh ${HOMEDIR}/entry.sh
 COPY ./launch.sh ${HOMEDIR}/launch.sh
 
 # Install Core Keeper server dependencies and clean up
+# lib32gcc1 <- fixes tile generation bug (obsidian wall around spawn) without graphic cards mounted to server
+# Thanks to https://www.reddit.com/r/CoreKeeperGame/comments/uym86p/comment/iays04w/?utm_source=share&utm_medium=web2x&context=3
 RUN set -x \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --no-install-suggests \
-	xvfb mesa-utils \
+	xvfb mesa-utils lib32gcc1 \
 	&& mkdir -p "${STEAMAPPDIR}" \
 	&& mkdir -p "${STEAMAPPDATADIR}" \
 	&& chmod +x "${HOMEDIR}/entry.sh" \
