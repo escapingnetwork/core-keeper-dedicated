@@ -15,11 +15,16 @@ ENV DLURL https://raw.githubusercontent.com/arguser/core-keeper-dedicated
 COPY ./entry.sh ${HOMEDIR}/entry.sh
 COPY ./launch.sh ${HOMEDIR}/launch.sh
 
+RUN dpkg --add-architecture i386
+
 # Install Core Keeper server dependencies and clean up
+# libx32gcc-s1 lib32gcc-s1 build-essential <- fixes tile generation bug (obsidian wall around spawn) without graphic cards mounted to server
+# need all 3 + dpkg i do not know why but every other combination would run the server at an extreme speed - that combination worked for me.
+# Thanks to https://www.reddit.com/r/CoreKeeperGame/comments/uym86p/comment/iays04w/?utm_source=share&utm_medium=web2x&context=3
 RUN set -x \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --no-install-suggests \
-	xvfb mesa-utils \
+	xvfb mesa-utils libx32gcc-s1 lib32gcc-s1 build-essential\
 	&& mkdir -p "${STEAMAPPDIR}" \
 	&& mkdir -p "${STEAMAPPDATADIR}" \
 	&& chmod +x "${HOMEDIR}/entry.sh" \
