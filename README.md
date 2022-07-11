@@ -4,10 +4,10 @@
 
 Explore an endless cavern of creatures, relics and resources in a mining sandbox adventure for 1-8 players. Mine, build, fight, craft and farm to unravel the mystery of the ancient Core. [Get Core Keeper at the Steam Store](https://store.steampowered.com/app/1621690/Core_Keeper/)
 
-[![Docker Image CI](https://github.com/arguser/core-keeper-dedicated/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/arguser/core-keeper-dedicated/actions/workflows/docker-image.yml)
+[![Docker Image CI](https://github.com/escapingnetwork/core-keeper-dedicated/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/escapingnetwork/core-keeper-dedicated/actions/workflows/docker-image.yml)
 
 ## Supported tags and respective `Dockerfile` links
--	[`latest` (*Dockerfile*)](https://github.com/arguser/core-keeper-dedicated/blob/main/Dockerfile)
+-	[`latest` (*Dockerfile*)](https://github.com/escapingnetwork/core-keeper-dedicated/blob/main/Dockerfile)
 
 ## How to run
 
@@ -20,7 +20,7 @@ Create two directories where you want to run your server :
 
 ### Using Docker CLI:
 
-`docker run -d -e WORLD_NAME="Core Keeper Server" -e MAX_PLAYERS=5 -v $(pwd)/server-data:/home/steam/core-keeper-data --name core-keeper-dedicated arguser/core-keeper-dedicated`
+`docker run -d -e WORLD_NAME="Core Keeper Server" -e MAX_PLAYERS=5 -v $(pwd)/server-data:/home/steam/core-keeper-data --name core-keeper-dedicated escaping/core-keeper-dedicated`
 
 ### Using Docker Compose
 Create a `docker-compose.yml` with the following content:
@@ -30,7 +30,7 @@ version: "3"
 
 services:
   core-keeper:
-    image: arguser/core-keeper-dedicated
+    image: escaping/core-keeper-dedicated
     volumes:
       - ./server-files:/home/steam/core-keeper-dedicated
       - ./server-data:/home/steam/core-keeper-data

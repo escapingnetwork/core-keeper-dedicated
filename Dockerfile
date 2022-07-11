@@ -10,7 +10,7 @@ ENV STEAMAPPID_TOOL 1963720
 ENV STEAMAPP core-keeper
 ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
 ENV STEAMAPPDATADIR "${HOMEDIR}/${STEAMAPP}-data"
-ENV DLURL https://raw.githubusercontent.com/arguser/core-keeper-dedicated
+ENV DLURL https://raw.githubusercontent.com/escapingnetwork/core-keeper-dedicated
 
 COPY ./entry.sh ${HOMEDIR}/entry.sh
 COPY ./launch.sh ${HOMEDIR}/launch.sh
@@ -29,7 +29,7 @@ RUN set -x \
 	&& mkdir -p "${STEAMAPPDATADIR}" \
 	&& chmod +x "${HOMEDIR}/entry.sh" \
 	&& chmod +x "${HOMEDIR}/launch.sh" \
-	&& chown -R "${USER}:${USER}" "${HOMEDIR}/entry.sh" "${HOMEDIR}/launch.sh" "${STEAMAPPDIR}" \
+	&& chown -R "${USER}:${USER}" "${HOMEDIR}/entry.sh" "${HOMEDIR}/launch.sh" "${STEAMAPPDIR}" "${STEAMAPPDATADIR}" \
 	&& rm -rf /var/lib/apt/lists/*
 
 
