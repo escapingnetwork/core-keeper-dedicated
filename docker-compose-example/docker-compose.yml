@@ -8,5 +8,6 @@ services:
     volumes:
       - ./server-files:/home/steam/core-keeper-dedicated
       - ./server-data:/home/steam/core-keeper-data
+      - /tmp/.X11-unix:/tmp/.X11-unix
     restart: always
     stop_grace_period: 2m
