@@ -36,7 +36,7 @@ RUN set -x \
 ENV WORLD_INDEX=0 \
 	WORLD_NAME="Core Keeper Server" \
 	WORLD_SEED=0 \
-	GAME_ID="" \
+	GAME_ID="FP6twS72XjwBFazdnNBaVTJbCd5V" \
 	DATA_PATH="" \
 	MAX_PLAYERS=10
 
