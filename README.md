@@ -49,6 +49,8 @@ WORLD_SEED=0
 GAME_ID=
 DATA_PATH=
 MAX_PLAYERS=10
+DISCORD=1
+DISCORD_HOOK=https://discord.com/api/webhooks/{id}/{token}
 ```
 
 On the folder which contains the files run `docker-compose up -d`.
