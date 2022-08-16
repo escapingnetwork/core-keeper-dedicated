@@ -45,7 +45,12 @@ while [ ! -f GameID.txt ]; do
         sleep 0.1
 done
 
-echo "Game ID: $(cat GameID.txt)"
+gameid=$(cat GameID.txt)
+echo "Game ID: ${gameid}"
+
+if [ $DISCORD -eq 1 ]; then
+    curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"${gameid}\"}" "${DISCORD_HOOK}"
+fi
 
 wait $ckpid
 ckpid=""
