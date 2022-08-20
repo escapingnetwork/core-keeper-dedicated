@@ -45,7 +45,20 @@ while [ ! -f GameID.txt ]; do
         sleep 0.1
 done
 
-echo "Game ID: $(cat GameID.txt)"
+gameid=$(cat GameID.txt)
+echo "Game ID: ${gameid}"
+
+if [ -z "$DISCORD" ]; then
+	DISCORD=0
+fi
+
+if [ $DISCORD -eq 1 ]; then
+    if [ -z "$DISCORD_HOOK" ]; then
+	echo "Please set DISCORD_WEBHOOK url."
+        else
+        curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"${gameid}\"}" "${DISCORD_HOOK}"
+    fi
+fi
 
 wait $ckpid
 ckpid=""

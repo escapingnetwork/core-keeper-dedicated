@@ -49,6 +49,8 @@ WORLD_SEED=0
 GAME_ID=
 DATA_PATH=
 MAX_PLAYERS=10
+DISCORD=1
+DISCORD_HOOK=https://discord.com/api/webhooks/{id}/{token}
 ```
 
 On the folder which contains the files run `docker-compose up -d`.
@@ -68,6 +70,8 @@ WORLD_SEED          The seed to use for a new world. Set to 0 to generate random
 GAME_ID             Game ID to use for the server. Need to be at least 23 characters and alphanumeric, excluding Y,y,x,0,O. Empty or not valid means a new ID will be generated at start.
 DATA_PATH           Save file location. If not set it defaults to a sub-folder named "DedicatedServer" at the default Core Keeper save location.
 MAX_PLAYERS         Maximum number of players that will be allowed to connect to server.
+DISCORD             Enables discord webhook features witch sends GameID to a channel.
+DISCORD_HOOK        Webhook url (Edit channel > Integrations > Create Webhook).
 ```
 
 ### Support
