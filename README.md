@@ -32,13 +32,16 @@ services:
   core-keeper:
     image: escaping/core-keeper-dedicated
     volumes:
-      - ./server-files:/home/steam/core-keeper-dedicated
-      - ./server-data:/home/steam/core-keeper-data
+      - server-files:/home/steam/core-keeper-dedicated
+      - server-data:/home/steam/core-keeper-data
       - /tmp/.X11-unix:/tmp/.X11-unix
-    env_file:
+    environment:
       - ./core.env
     restart: always
     stop_grace_period: 2m
+volumes:
+    server-files:
+    server-data:
 ```
 
 Create a `core.env` file, it should contain the environment variables for the dedicated server, see configuration for reference. Example:
