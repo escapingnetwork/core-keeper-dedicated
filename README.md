@@ -35,7 +35,7 @@ services:
       - server-files:/home/steam/core-keeper-dedicated
       - server-data:/home/steam/core-keeper-data
       - /tmp/.X11-unix:/tmp/.X11-unix
-    environment:
+    env_file:
       - ./core.env
     restart: always
     stop_grace_period: 2m
