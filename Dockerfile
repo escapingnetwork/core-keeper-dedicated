@@ -12,6 +12,8 @@ ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
 ENV STEAMAPPDATADIR "${HOMEDIR}/${STEAMAPP}-data"
 ENV DLURL https://raw.githubusercontent.com/escapingnetwork/core-keeper-dedicated
 
+VOLUME ${STEAMAPPDIR}
+
 COPY ./entry.sh ${HOMEDIR}/entry.sh
 COPY ./launch.sh ${HOMEDIR}/launch.sh
 
@@ -32,6 +34,9 @@ RUN set -x \
 	&& chown -R "${USER}:${USER}" "${HOMEDIR}/entry.sh" "${HOMEDIR}/launch.sh" "${STEAMAPPDIR}" "${STEAMAPPDATADIR}" \
 	&& rm -rf /var/lib/apt/lists/*
 
+RUN mkdir /tmp/.X11-unix \
+	&& chown -R "${USER}:${USER}" /tmp/.X11-unix
+
 
 ENV WORLD_INDEX=0 \
 	WORLD_NAME="Core Keeper Server" \
@@ -45,7 +50,5 @@ USER ${USER}
 
 # Switch to workdir
 WORKDIR ${HOMEDIR}
-
-VOLUME ${STEAMAPPDIR}
 
 CMD ["bash", "entry.sh"] 
