@@ -12,8 +12,6 @@ ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
 ENV STEAMAPPDATADIR "${HOMEDIR}/${STEAMAPP}-data"
 ENV DLURL https://raw.githubusercontent.com/escapingnetwork/core-keeper-dedicated
 
-VOLUME ${STEAMAPPDIR}
-
 COPY ./entry.sh ${HOMEDIR}/entry.sh
 COPY ./launch.sh ${HOMEDIR}/launch.sh
 
@@ -51,4 +49,6 @@ USER ${USER}
 # Switch to workdir
 WORKDIR ${HOMEDIR}
 
-CMD ["bash", "entry.sh"] 
+VOLUME ${STEAMAPPDIR}
+
+CMD ["bash", "entry.sh"]
