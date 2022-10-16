@@ -34,7 +34,6 @@ services:
     volumes:
       - server-files:/home/steam/core-keeper-dedicated
       - server-data:/home/steam/core-keeper-data
-      - /tmp/.X11-unix:/tmp/.X11-unix
     env_file:
       - ./core.env
     restart: always
