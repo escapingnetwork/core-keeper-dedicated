@@ -32,6 +32,9 @@ RUN set -x \
 	&& chown -R "${USER}:${USER}" "${HOMEDIR}/entry.sh" "${HOMEDIR}/launch.sh" "${STEAMAPPDIR}" "${STEAMAPPDATADIR}" \
 	&& rm -rf /var/lib/apt/lists/*
 
+RUN mkdir /tmp/.X11-unix \
+	&& chown -R "${USER}:${USER}" /tmp/.X11-unix
+
 
 ENV WORLD_INDEX=0 \
 	WORLD_NAME="Core Keeper Server" \
@@ -48,4 +51,4 @@ WORKDIR ${HOMEDIR}
 
 VOLUME ${STEAMAPPDIR}
 
-CMD ["bash", "entry.sh"] 
+CMD ["bash", "entry.sh"]
