@@ -29,7 +29,23 @@ set -m
 rm -f /tmp/.X99-lock
 
 Xvfb :99 -screen 0 1x1x24 -nolisten tcp &
+export DISPLAY=:99
 xvfbpid=$!
+
+retry_count=0
+max_retries=2
+xvfb_test=0
+until [ $retry_count -gt $max_retries ]; do
+    xvinfo
+    xvfb_test=$?
+    if [ $xvfb_test != 255 ]; then
+        retry_count=$(($max_retries + 1))
+    else
+        retry_count=$(($retry_count + 1))
+        echo "Failed to start Xvfb, retry: $retry_count"
+        sleep 2
+    fi done
+  if [ $xvfb_test == 255 ]; then exit 255; fi
 
 rm -f GameID.txt
 
