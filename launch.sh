@@ -32,6 +32,8 @@ Xvfb :99 -screen 0 1x1x24 -nolisten tcp &
 export DISPLAY=:99
 xvfbpid=$!
 
+# Wait for xvfb ready.
+# Thanks to https://hg.mozilla.org/mozilla-central/file/922e64883a5b4ebf6f2345dfb85f04b487a0e714/testing/docker/desktop-build/bin/build.sh
 retry_count=0
 max_retries=2
 xvfb_test=0
