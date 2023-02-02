@@ -41,7 +41,8 @@ ENV WORLD_INDEX=0 \
 	WORLD_SEED=0 \
 	GAME_ID="" \
 	DATA_PATH="" \
-	MAX_PLAYERS=10
+	MAX_PLAYERS=10 \
+	SEASON=0
 
 # Switch to user
 USER ${USER}
