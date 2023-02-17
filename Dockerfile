@@ -24,7 +24,7 @@ RUN dpkg --add-architecture i386
 RUN set -x \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --no-install-suggests \
-	xvfb mesa-utils libx32gcc-s1 lib32gcc-s1 build-essential\
+	xvfb mesa-utils libx32gcc-s1 lib32gcc-s1 build-essential libxi6 \
 	&& mkdir -p "${STEAMAPPDIR}" \
 	&& mkdir -p "${STEAMAPPDATADIR}" \
 	&& chmod +x "${HOMEDIR}/entry.sh" \
