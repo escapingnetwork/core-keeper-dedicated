@@ -53,6 +53,7 @@ DATA_PATH=
 MAX_PLAYERS=10
 DISCORD=1
 DISCORD_HOOK=https://discord.com/api/webhooks/{id}/{token}
+SEASON=
 ```
 
 On the folder which contains the files run `docker-compose up -d`.
@@ -74,6 +75,7 @@ DATA_PATH           Save file location. If not set it defaults to a sub-folder n
 MAX_PLAYERS         Maximum number of players that will be allowed to connect to server.
 DISCORD             Enables discord webhook features witch sends GameID to a channel.
 DISCORD_HOOK        Webhook url (Edit channel > Integrations > Create Webhook).
+SEASON              Enables Seasonal Events. 0 is default, 1 is Easter, 2 is Halloween, 3 is Christmas.
 ```
 
 ### Support
