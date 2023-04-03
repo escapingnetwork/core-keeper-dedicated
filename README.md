@@ -78,5 +78,9 @@ DISCORD_HOOK        Webhook url (Edit channel > Integrations > Create Webhook).
 SEASON              Enables Seasonal Events. 0 is default, 1 is Easter, 2 is Halloween, 3 is Christmas.
 ```
 
-### Support
-https://tallyco.in/leo/
+### Contributors
+<a href="https://github.com/escapingnetwork/core-keeper-dedicated/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=escapingnetwork/core-keeper-dedicated" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
