@@ -45,7 +45,7 @@ if [ ! -z "${WORLD_MODE}" ]; then params=( "${params[@]}" -worldmode "${WORLD_MO
 if [ ! -z "${GAME_ID}" ]; then params=( "${params[@]}" -gameid "\"${GAME_ID}\"" ); fi
 if [ ! -z "${DATA_PATH}" ]; then params=( "${params[@]}" -datapath "\"${DATA_PATH}\"" ); fi
 if [ ! -z "${MAX_PLAYERS}" ]; then params=( "${params[@]}" -maxplayers "${MAX_PLAYERS}" ); fi
-if [ ! -z "${SEASON}" ]; then params=( "${params[@]}" -season "${SEASON}" ); fi
+if [ ! -z "${SEASON}" ]; then params=( "${params[@]}" -season "\"${SEASON}\"" ); fi
 if [ ! -z "${SERVER_IP}" ]; then params=( "${params[@]}" -ip "\"${SERVER_IP}\"" ); fi
 if [ ! -z "${SERVER_PORT}" ]; then params=( "${params[@]}" -port "${SERVER_PORT}" ); fi
 
