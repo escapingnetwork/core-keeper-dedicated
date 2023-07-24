@@ -39,10 +39,13 @@ RUN mkdir /tmp/.X11-unix \
 ENV WORLD_INDEX=0 \
 	WORLD_NAME="Core Keeper Server" \
 	WORLD_SEED=0 \
+	WORLD_MODE=0 \
 	GAME_ID="" \
 	DATA_PATH="" \
 	MAX_PLAYERS=10 \
-	SEASON=0
+	SEASON=-1 \
+	SERVER_IP="" \
+    SERVER_PORT=""
 
 # Switch to user
 USER ${USER}
