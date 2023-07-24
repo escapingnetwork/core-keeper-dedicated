@@ -39,14 +39,14 @@ chmod +x ./CoreKeeperServer
 declare -a params
 params=(-batchmode -logfile "CoreKeeperServerLog.txt")
 if [ ! -z "${WORLD_INDEX}" ]; then params=( "${params[@]}" -world "${WORLD_INDEX}" ); fi
-if [ ! -z "${WORLD_NAME}" ]; then params=( "${params[@]}" -worldname "\"${WORLD_NAME}\"" ); fi
+if [ ! -z "${WORLD_NAME}" ]; then params=( "${params[@]}" -worldname "${WORLD_NAME}" ); fi
 if [ ! -z "${WORLD_SEED}" ]; then params=( "${params[@]}" -worldseed "${WORLD_SEED}" ); fi
 if [ ! -z "${WORLD_MODE}" ]; then params=( "${params[@]}" -worldmode "${WORLD_MODE}" ); fi
-if [ ! -z "${GAME_ID}" ]; then params=( "${params[@]}" -gameid "\"${GAME_ID}\"" ); fi
-if [ ! -z "${DATA_PATH}" ]; then params=( "${params[@]}" -datapath "\"${DATA_PATH}\"" ); fi
+if [ ! -z "${GAME_ID}" ]; then params=( "${params[@]}" -gameid "${GAME_ID}" ); fi
+if [ ! -z "${DATA_PATH}" ]; then params=( "${params[@]}" -datapath "${DATA_PATH}" ); fi
 if [ ! -z "${MAX_PLAYERS}" ]; then params=( "${params[@]}" -maxplayers "${MAX_PLAYERS}" ); fi
-if [ ! -z "${SEASON}" ]; then params=( "${params[@]}" -season "\"${SEASON}\"" ); fi
-if [ ! -z "${SERVER_IP}" ]; then params=( "${params[@]}" -ip "\"${SERVER_IP}\"" ); fi
+if [ ! -z "${SEASON}" ]; then params=( "${params[@]}" -season "${SEASON}" ); fi
+if [ ! -z "${SERVER_IP}" ]; then params=( "${params[@]}" -ip "${SERVER_IP}" ); fi
 if [ ! -z "${SERVER_PORT}" ]; then params=( "${params[@]}" -port "${SERVER_PORT}" ); fi
 
 echo "${params[@]}"
