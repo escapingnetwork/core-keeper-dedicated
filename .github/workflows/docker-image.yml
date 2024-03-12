@@ -23,7 +23,7 @@ jobs:
         
     - name: Extract metadata (tags, labels) for Docker
       id: meta
-      uses: docker/metadata-action@v5.0.0
+      uses: docker/metadata-action@v5.5.1
       with:
         images: escaping/core-keeper-dedicated
         tags: |
