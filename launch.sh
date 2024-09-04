@@ -9,8 +9,8 @@ ckpid=""
 function kill_corekeeperserver {
         if [[ ! -z "$ckpid" ]]; then
                 kill $ckpid
+                wait $ckpid
         fi
-        sleep 1
         if [[ ! -z "$xvfbpid" ]]; then
                 kill $xvfbpid
         fi
