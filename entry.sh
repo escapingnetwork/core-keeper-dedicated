@@ -12,4 +12,4 @@ fi
 
 bash "${STEAMCMDDIR}/steamcmd.sh" +force_install_dir "$STEAMAPPDIR" +login anonymous +app_update "$STEAMAPPID" +app_update "$STEAMAPPID_TOOL" +quit
 
-bash "./launch.sh"
+exec bash "./launch.sh"
