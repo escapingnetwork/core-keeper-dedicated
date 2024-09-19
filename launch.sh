@@ -90,7 +90,8 @@ if [ $DISCORD -eq 1 ]; then
     if [ -z "$DISCORD_HOOK" ]; then
 	echo "Please set DISCORD_WEBHOOK url."
         else
-        curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"${gameid}\"}" "${DISCORD_HOOK}"
+	format="${DISCORD_PRINTF_STR:-%s}"
+        curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$(printf $format $gameid)\"}" "${DISCORD_HOOK}"
     fi
 fi
 
