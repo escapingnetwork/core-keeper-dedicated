@@ -77,8 +77,9 @@ WORLD_MODE          Sets the world mode for the world. Can be Normal (0), Hard (
 GAME_ID             Game ID to use for the server. Need to be at least 28 characters and alphanumeric, excluding Y,y,x,0,O. Empty or not valid means a new ID will be generated at start.
 DATA_PATH           Save file location. If not set it defaults to a sub-folder named "DedicatedServer" at the default Core Keeper save location.
 MAX_PLAYERS         Maximum number of players that will be allowed to connect to server.
-DISCORD             Enables discord webhook features witch sends GameID to a channel.
+DISCORD             Enables discord webhook features which sends GameID to a channel.
 DISCORD_HOOK        Webhook url (Edit channel > Integrations > Create Webhook).
+DISCORD_PRINTF_STR  The format string used to generate the content of the Discord webook. Default is `%s`, simply sending the GameID. 
 SEASON              Overrides current season by setting to any of None (0), Easter (1), Halloween (2), Christmas (3), Valentine (4), Anniversary (5), CherryBlossom (6), LunarNewYear(7). -1 is default setting where it is set depending on system date.
 SERVER_IP           Only used if port is set. Sets the address that the server will bind to.
 SERVER_PORT         What port to bind to. If not set, then the server will use the Steam relay network. If set the clients will connect to the server directly and the port needs to be open.
