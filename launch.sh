@@ -86,13 +86,13 @@ if [ -z "$DISCORD" ]; then
 	DISCORD=0
 fi
 
-if [ $DISCORD -eq 1 ]; then
-    if [ -z "$DISCORD_HOOK" ]; then
-	echo "Please set DISCORD_WEBHOOK url."
-        else
-	format="${DISCORD_PRINTF_STR:-%s}"
-        curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$(printf $format $gameid)\"}" "${DISCORD_HOOK}"
-    fi
+if [ $DISCORD -eq 1 ]; then 
+  if [ -z "$DISCORD_HOOK" ]; then 
+    echo "Please set DISCORD_WEBHOOK url." 
+  else 
+    format="${DISCORD_PRINTF_STR:-%s}"
+    curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$(printf "${format}" "${gameid}")\"}" "${DISCORD_HOOK}" 
+  fi
 fi
 
 wait $ckpid
