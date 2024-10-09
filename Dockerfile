@@ -33,7 +33,8 @@ RUN set -x \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /tmp/.X11-unix \
-	&& chown -R "${USER}:${USER}" /tmp/.X11-unix
+    	&& chmod 1777 /tmp/.X11-unix \
+    	&& chown root /tmp/.X11-unix
 
 
 ENV WORLD_INDEX=0 \
