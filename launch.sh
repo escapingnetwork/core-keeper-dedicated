@@ -26,7 +26,8 @@ fi
 
 set -m
 
-rm -f /tmp/.X99-lock
+#Restart cleanup
+if [ -f "/tmp/.X99-lock" ]; then rm /tmp/.X99-lock; fi
 
 Xvfb :99 -screen 0 1x1x24 -nolisten tcp &
 export DISPLAY=:99
