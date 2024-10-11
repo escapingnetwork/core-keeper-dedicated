@@ -33,7 +33,7 @@ ckpid=$!
 
 echo "Started server process with pid ${ckpid}"
 
-tail --pid "$ckpid" -n +1 -f "$logfile" &
+tail --pid "$ckpid" -n +1 -F "$logfile" &
 
 until [ -f GameID.txt ]; do
 	sleep 0.1
