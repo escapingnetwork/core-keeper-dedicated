@@ -36,10 +36,10 @@ echo "Started server process with pid ${ckpid}"
 tail --pid "$ckpid" -n +1 -f "$logfile" &
 
 until [ -f GameID.txt ]; do
-    sleep 0.1
+	sleep 0.1
 done
 
-gameid=$(< GameID.txt)
+gameid=$(<GameID.txt)
 if [ -n "$DISCORD_HOOK" ]; then
 	format="${DISCORD_PRINTF_STR:-%s}"
 	curl -fsSL -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$(printf "${format}" "${gameid}")\"}" "${DISCORD_HOOK}"
