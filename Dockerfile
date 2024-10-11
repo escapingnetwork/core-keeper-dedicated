@@ -16,27 +16,27 @@ ENV DLURL https://raw.githubusercontent.com/escapingnetwork/core-keeper-dedicate
 RUN dpkg --add-architecture i386
 
 # Install Core Keeper server dependencies and clean up
-RUN set -x &&
-	apt-get update &&
-	apt-get install -y --no-install-recommends --no-install-suggests \
+RUN set -x \
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends --no-install-suggests \
 		xvfb \
 		libxi6 \
 		tini \
-		tzdata &&
-	rm -rf /var/lib/apt/lists/*
+		tzdata \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Setup X11 Sockets folder
-RUN mkdir /tmp/.X11-unix &&
-	chmod 1777 /tmp/.X11-unix &&
-	chown root /tmp/.X11-unix
+RUN mkdir /tmp/.X11-unix \
+	&& chmod 1777 /tmp/.X11-unix \
+	&& chown root /tmp/.X11-unix
 
 # Setup folders
 COPY ./scripts ${SCRIPTSDIR}
-RUN set -x &&
-	chmod +x -R "${SCRIPTSDIR}" &&
-	mkdir -p "${STEAMAPPDIR}" &&
-	mkdir -p "${STEAMAPPDATADIR}" &&
-	chown -R "${USER}:${USER}" "${SCRIPTSDIR}" "${STEAMAPPDIR}" "${STEAMAPPDATADIR}"
+RUN set -x \
+	&& chmod +x -R "${SCRIPTSDIR}" \
+	&& mkdir -p "${STEAMAPPDIR}" \
+	&& mkdir -p "${STEAMAPPDATADIR}" \
+	&& chown -R "${USER}:${USER}" "${SCRIPTSDIR}" "${STEAMAPPDIR}" "${STEAMAPPDATADIR}"
 
 # Declare envs and their default values
 ENV PUID=1000 \
