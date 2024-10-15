@@ -23,6 +23,10 @@ if [ -f "GameID.txt" ]; then rm GameID.txt; fi
 # Creates `logfile` var with log file path.
 source "${SCRIPTSDIR}/compile-parameters.sh"
 
+# Create the log file and folder.
+mkdir -p "${STEAMAPPDIR}/logs"
+touch "$logfile"
+
 # Start Xvfb
 Xvfb :99 -screen 0 1x1x24 -nolisten tcp &
 xvfbpid=$!
@@ -33,7 +37,7 @@ ckpid=$!
 
 echo "Started server process with pid ${ckpid}"
 
-tail --pid "$ckpid" -n +1 -F "$logfile" &
+tail --pid "$ckpid" -n +1 -f "$logfile" &
 
 until [ -f GameID.txt ]; do
 	sleep 0.1
