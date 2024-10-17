@@ -37,6 +37,7 @@ services:
       - server-data:/home/steam/core-keeper-data
     env_file:
       - ./core.env
+    network_mode: "host"
     restart: always
     stop_grace_period: 2m
 volumes:
