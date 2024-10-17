@@ -30,6 +30,7 @@ version: "3"
 
 services:
   core-keeper:
+    container_name: core-keeper-dedicated
     image: escaping/core-keeper-dedicated
     volumes:
       - server-files:/home/steam/core-keeper-dedicated
