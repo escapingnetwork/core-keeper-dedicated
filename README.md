@@ -20,7 +20,7 @@ Create two directories where you want to run your server :
 
 ### Using Docker CLI:
 
-`docker run -d -e WORLD_NAME="Core Keeper Server" -e MAX_PLAYERS=5 -v $(pwd)/server-data:/home/steam/core-keeper-data --name core-keeper-dedicated escaping/core-keeper-dedicated`
+`docker run -d -e WORLD_NAME="Core Keeper Server" -e MAX_PLAYERS=5 -v $(pwd)/server-data:/home/steam/core-keeper-data --name core-keeper-dedicated --network host escaping/core-keeper-dedicated`
 
 ### Using Docker Compose
 Create a `docker-compose.yml` with the following content:
