@@ -6,22 +6,22 @@
 # Function to add arguments to parameter array
 # usage: add_param <name> <$env_value> [default_value]
 add_param() {
-    local param_name="$1"
-    local param_value="$2"
-    local param_default="$3"
+	local param_name="$1"
+	local param_value="$2"
+	local param_default="$3"
 
-    if [ -n "$param_value" ]; then
-        params+=("$param_name" "$param_value")
-    elif [ -n "$param_default" ]; then
-        params+=("$param_name" "$param_default")
-    fi
+	if [ -n "$param_value" ]; then
+		params+=("$param_name" "$param_value")
+	elif [ -n "$param_default" ]; then
+		params+=("$param_name" "$param_default")
+	fi
 }
 
 # Makes log file avaliable for other uses.
 logfile="${STEAMAPPDIR}/logs/$(date '+%Y-%m-%d_%H-%M-%S').log"
 params=(
-    "-batchmode"
-    "-logfile" "$logfile"
+	"-batchmode"
+	"-logfile" "$logfile"
 )
 
 add_param "-world" "$WORLD_INDEX"

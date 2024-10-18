@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Switch to workdir
-cd "${STEAMAPPDIR}"
+cd "${STEAMAPPDIR}" || exit
 
 ### Function for gracefully shutdown
 function kill_corekeeperserver {
@@ -9,7 +9,7 @@ function kill_corekeeperserver {
 		kill $ckpid
 		wait $ckpid
 	fi
-	if [[ ! -z "$xvfbpid" ]]; then
+	if [[ -n "$xvfbpid" ]]; then
 		kill $xvfbpid
 		wait $xvfbpid
 	fi
@@ -47,6 +47,7 @@ done
 gameid=$(<GameID.txt)
 if [ -n "$DISCORD_HOOK" ]; then
 	format="${DISCORD_PRINTF_STR:-%s}"
+	# shellcheck disable=SC2059
 	curl -fsSL -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$(printf "${format}" "${gameid}")\"}" "${DISCORD_HOOK}"
 fi
 
