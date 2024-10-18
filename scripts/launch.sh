@@ -9,12 +9,13 @@ function kill_corekeeperserver {
 		kill $ckpid
 		wait $ckpid
 	fi
-	if [[ -n "$xvfbpid" ]]; then
-		kill $xvfbpid
-	fi
+	if [[ ! -z "$xvfbpid" ]]; then	
+        kill $xvfbpid
+		wait $xvfbpid
+    fi
 }
 
-trap kill_corekeeperserver EXIT TERM
+trap kill_corekeeperserver EXIT
 
 if [ -f "GameID.txt" ]; then rm GameID.txt; fi
 

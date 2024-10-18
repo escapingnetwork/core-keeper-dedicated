@@ -32,7 +32,7 @@ fi
 if [ -f "/tmp/.X99-lock" ]; then rm /tmp/.X99-lock; fi
 
 if [[ "$(id -u)" -eq 0 ]]; then
-	exec su "${USER}" -c "exec bash ${SCRIPTSDIR}/setup.sh"
+	exec gosu "${USER}" bash "${SCRIPTSDIR}/setup.sh"
 else
 	exec bash "${SCRIPTSDIR}/setup.sh"
 fi

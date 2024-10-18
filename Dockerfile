@@ -11,6 +11,7 @@ ENV STEAMAPP core-keeper
 ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
 ENV STEAMAPPDATADIR "${HOMEDIR}/${STEAMAPP}-data"
 ENV SCRIPTSDIR "${HOMEDIR}/scripts"
+ENV MODSDIR "${STEAMAPPDATADIR}/StreamingAssets/Mods"
 ENV DLURL https://raw.githubusercontent.com/escapingnetwork/core-keeper-dedicated
 
 RUN dpkg --add-architecture i386
@@ -23,6 +24,7 @@ RUN set -x \
 		libxi6 \
 		tini \
 		tzdata \
+		gosu \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Setup X11 Sockets folder
