@@ -9,10 +9,10 @@ function kill_corekeeperserver {
 		kill $ckpid
 		wait $ckpid
 	fi
-	if [[ ! -z "$xvfbpid" ]]; then	
-        kill $xvfbpid
+	if [[ ! -z "$xvfbpid" ]]; then
+		kill $xvfbpid
 		wait $xvfbpid
-    fi
+	fi
 }
 
 trap kill_corekeeperserver EXIT
