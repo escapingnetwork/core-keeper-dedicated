@@ -5,14 +5,14 @@ cd "${STEAMAPPDIR}" || exit
 
 ### Function for gracefully shutdown
 function kill_corekeeperserver {
-	if [[ -n "$ckpid" ]]; then
-		kill $ckpid
-		wait $ckpid
-	fi
-	if [[ -n "$xvfbpid" ]]; then
-		kill $xvfbpid
-		wait $xvfbpid
-	fi
+    if [[ -n "$ckpid" ]]; then
+        kill $ckpid
+        wait $ckpid
+    fi
+    if [[ -n "$xvfbpid" ]]; then
+        kill $xvfbpid
+        wait $xvfbpid
+    fi
 }
 
 trap kill_corekeeperserver EXIT
@@ -41,14 +41,14 @@ echo "Started server process with pid ${ckpid}"
 tail --pid "$ckpid" -n +1 -f "$logfile" &
 
 until [ -f GameID.txt ]; do
-	sleep 0.1
+    sleep 0.1
 done
 
 gameid=$(<GameID.txt)
 if [ -n "$DISCORD_HOOK" ]; then
-	format="${DISCORD_PRINTF_STR:-%s}"
-	# shellcheck disable=SC2059
-	curl -fsSL -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$(printf "${format}" "${gameid}")\"}" "${DISCORD_HOOK}"
+    format="${DISCORD_PRINTF_STR:-%s}"
+    # shellcheck disable=SC2059
+    curl -fsSL -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$(printf "${format}" "${gameid}")\"}" "${DISCORD_HOOK}"
 fi
 
 wait $ckpid
