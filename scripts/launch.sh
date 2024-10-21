@@ -33,7 +33,7 @@ Xvfb :99 -screen 0 1x1x24 -nolisten tcp &
 xvfbpid=$!
 
 # Start Core Keeper Server
-DISPLAY=:99 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:../Steamworks SDK Redist/linux64/" ./CoreKeeperServer "${params[@]}" &
+DISPLAY=:99 LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${STEAMCMDDIR}/linux64/" ./CoreKeeperServer "${params[@]}" &
 ckpid=$!
 
 echo "Started server process with pid ${ckpid}"
