@@ -77,12 +77,12 @@ These are the arguments you can use to customize server behavior with default va
 | PUID | 1000 | The user ID on the host that the container should use for file ownership and permissions. |
 | PGID | 1000 | The group ID on the host that the container should use for file ownership and permissions. |
 | WORLD_INDEX | 0 | Which world index to use. |
-| WORLD_NAME | "" | The name to use for the server. |
+| WORLD_NAME | "Core Keeper Server" | The name to use for the server. |
 | WORLD_SEED | 0 | The seed to use for a new world. Set to 0 to generate random seed. |
 | WORLD_MODE | 0 | Sets the world mode for the world. Can be Normal (0), Hard (1), Creative (2), Casual (4). |
 | SEASON | -1 | Overrides current season by setting to any of None (0), Easter (1), Halloween (2), Christmas (3), Valentine (4), Anniversary (5), CherryBlossom (6), LunarNewYear(7) or Normal Date (-1). |
 | GAME_ID | "" |  Game ID to use for the server. Need to be at least 28 characters and alphanumeric, excluding Y,y,x,0,O. Empty or not valid means a new ID will be generated at start. |
-| MAX_PLAYERS | 3 | Maximum number of players that will be allowed to connect to server. |
+| MAX_PLAYERS | 10 | Maximum number of players that will be allowed to connect to server. |
 | DATA_PATH | "/home/steam/core-keeper-data" | Save file location. |
 | DISCORD_HOOK | "" | Webhook url (Edit channel > Integrations > Create Webhook). |
 | DISCORD_PRINTF_STR | "%s" | The format string used to generate the content of the Discord webook. |
