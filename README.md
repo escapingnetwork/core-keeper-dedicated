@@ -26,8 +26,6 @@ Create two directories where you want to run your server :
 Create a `docker-compose.yml` with the following content:
 
 ```yml
-version: "3"
-
 services:
   core-keeper:
     container_name: core-keeper-dedicated

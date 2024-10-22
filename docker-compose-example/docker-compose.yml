@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   core-keeper:
     container_name: core-keeper-dedicated
