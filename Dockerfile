@@ -25,6 +25,8 @@ RUN set -x \
         tini \
         tzdata \
         gosu \
+        jo \
+        gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
 # Setup X11 Sockets folder
@@ -53,7 +55,27 @@ ENV PUID=1000 \
     SEASON=-1 \
     SERVER_IP="" \
     SERVER_PORT="" \
-    DISCORD_HOOK=""
+    DISCORD_WEBHOOK_URL="" \
+    # Player Join
+    DISCORD_PLAYER_JOIN_ENABLED=true \
+    DISCORD_PLAYER_JOIN_MESSAGE='${char_name} (${steamid}) has joined the server.' \
+    DISCORD_PLAYER_JOIN_TITLE="Player Joined" \
+    DISCORD_PLAYER_JOIN_COLOR="47456" \
+    # Player Leave
+    DISCORD_PLAYER_LEAVE_ENABLED=true \
+    DISCORD_PLAYER_LEAVE_MESSAGE='${char_name} (${steamid}) has disconnected. Reason: ${reason}.' \
+    DISCORD_PLAYER_LEAVE_TITLE="Player left" \
+    DISCORD_PLAYER_LEAVE_COLOR="11477760" \
+    # Server Start
+    DISCORD_SERVER_START_ENABLED=true \
+    DISCORD_SERVER_START_MESSAGE='**World:** ${world_name}\n**GameID:** ${gameid}' \
+    DISCORD_SERVER_START_TITLE="Server Started" \
+    DISCORD_SERVER_START_COLOR="2013440" \
+    # Server Stop
+    DISCORD_SERVER_STOP_ENABLED=true \
+    DISCORD_SERVER_STOP_MESSAGE="" \
+    DISCORD_SERVER_STOP_TITLE="Server Stopped" \
+    DISCORD_SERVER_STOP_COLOR="12779520"
 
 # Switch to workdir
 WORKDIR ${HOMEDIR}
