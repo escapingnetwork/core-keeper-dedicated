@@ -52,7 +52,7 @@ ENV PUID=1000 \
     GAME_ID="" \
     DATA_PATH="${STEAMAPPDATADIR}" \
     MAX_PLAYERS=10 \
-    SEASON=-1 \
+    SEASON="" \
     SERVER_IP="" \
     SERVER_PORT="" \
     DISCORD_WEBHOOK_URL="" \
@@ -64,7 +64,7 @@ ENV PUID=1000 \
     # Player Leave
     DISCORD_PLAYER_LEAVE_ENABLED=true \
     DISCORD_PLAYER_LEAVE_MESSAGE='${char_name} (${steamid}) has disconnected. Reason: ${reason}.' \
-    DISCORD_PLAYER_LEAVE_TITLE="Player left" \
+    DISCORD_PLAYER_LEAVE_TITLE="Player Left" \
     DISCORD_PLAYER_LEAVE_COLOR="11477760" \
     # Server Start
     DISCORD_SERVER_START_ENABLED=true \
