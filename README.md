@@ -106,15 +106,15 @@ These are the arguments you can use to customize server behavior with default va
 | SERVER_PORT | No Default | What port to bind to. If not set, then the server will use the Steam relay network. If set the clients will connect to the server directly and the port needs to be open. |
 | DISCORD_WEBHOOK_URL | "" | Webhook url (Edit channel > Integrations > Create Webhook). |
 | DISCORD_PLAYER_JOIN_ENABLED | true | Enable/Disable message on player join |
-| DISCORD_PLAYER_JOIN_MESSAGE | "\$\${char_name} (\$\${steamid}) has joined the server." | Embed message |
+| DISCORD_PLAYER_JOIN_MESSAGE | `"$${char_name} ($${steamid}) has joined the server."` | Embed message |
 | DISCORD_PLAYER_JOIN_TITLE | "Player Joined" | Embed title |
 | DISCORD_PLAYER_JOIN_COLOR | "47456" | Embed color |
 | DISCORD_PLAYER_LEAVE_ENABLED | true | Enable/Disable message on player leave |
-| DISCORD_PLAYER_LEAVE_MESSAGE | "\$\${char_name} (\$\${steamid}) has disconnected. Reason: \$\${reason}." | Embed message |
+| DISCORD_PLAYER_LEAVE_MESSAGE | `"$${char_name} ($${steamid}) has disconnected. Reason: $${reason}."` | Embed message |
 | DISCORD_PLAYER_LEAVE_TITLE | "Player Left" | Embed title |
 | DISCORD_PLAYER_LEAVE_COLOR | "11477760" | Embed color |
 | DISCORD_SERVER_START_ENABLED | true | Enable/Disable message on server start |
-| DISCORD_SERVER_START_MESSAGE | "\*\*World:\*\* \$\${world_name}\n\*\*GameID:\*\* \$\${gameid}" | Embed message |
+| DISCORD_SERVER_START_MESSAGE | `"**World:** $${world_name}\n**GameID:** $${gameid}"` | Embed message |
 | DISCORD_SERVER_START_TITLE | "Server Started" | Embed title |
 | DISCORD_SERVER_START_COLOR | "2013440" | Embed color |
 | DISCORD_SERVER_STOP_ENABLED | true | Enable/Disable message on server stop |
