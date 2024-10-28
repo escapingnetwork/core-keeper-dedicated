@@ -47,6 +47,6 @@ LogDebug "Started server process with pid ${ckpid}"
 
 # Monitor server logs for player join/leave, server start, and server stop
 source "${SCRIPTSDIR}/logfile-parser.sh"
-tail -f "$logfile" | LogParser &
+tail --pid "$ckpid" -f "$logfile" | LogParser &
 
 wait $ckpid
