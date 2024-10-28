@@ -5,14 +5,14 @@ FROM cm2network/steamcmd:root
 
 LABEL maintainer="leandro.martin@protonmail.com"
 
-ENV STEAMAPPID 1007
-ENV STEAMAPPID_TOOL 1963720
-ENV STEAMAPP core-keeper
-ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
-ENV STEAMAPPDATADIR "${HOMEDIR}/${STEAMAPP}-data"
-ENV SCRIPTSDIR "${HOMEDIR}/scripts"
-ENV MODSDIR "${STEAMAPPDATADIR}/StreamingAssets/Mods"
-ENV DLURL https://raw.githubusercontent.com/escapingnetwork/core-keeper-dedicated
+ENV STEAMAPPID=1007
+ENV STEAMAPPID_TOOL=1963720
+ENV STEAMAPP=core-keeper
+ENV STEAMAPPDIR="${HOMEDIR}/${STEAMAPP}-dedicated"
+ENV STEAMAPPDATADIR="${HOMEDIR}/${STEAMAPP}-data"
+ENV SCRIPTSDIR="${HOMEDIR}/scripts"
+ENV MODSDIR="${STEAMAPPDATADIR}/StreamingAssets/Mods"
+ENV DLURL=https://raw.githubusercontent.com/escapingnetwork/core-keeper-dedicated
 
 RUN dpkg --add-architecture i386
 
