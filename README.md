@@ -98,7 +98,7 @@ These are the arguments you can use to customize server behavior with default va
 | WORLD_NAME | "Core Keeper Server" | The name to use for the server. |
 | WORLD_SEED | 0 | The seed to use for a new world. Set to 0 to generate random seed. |
 | WORLD_MODE | 0 | Sets the world mode for the world. Can be Normal (0), Hard (1), Creative (2), Casual (4). |
-| SEASON | No Default | Overrides current season by setting to any of None (0), Easter (1), Halloween (2), Christmas (3), Valentine (4), Anniversary (5), CherryBlossom (6), LunarNewYear(7).\n**Do not set this env var if you want real date season.** |
+| SEASON | No Default | Overrides current season by setting to any of None (0), Easter (1), Halloween (2), Christmas (3), Valentine (4), Anniversary (5), CherryBlossom (6), LunarNewYear(7).<br/>**Do not set this env var if you want real date season.** |
 | GAME_ID | "" |  Game ID to use for the server. Need to be at least 28 characters and alphanumeric, excluding Y,y,x,0,O. Empty or not valid means a new ID will be generated at start. |
 | MAX_PLAYERS | 10 | Maximum number of players that will be allowed to connect to server. |
 | DATA_PATH | "/home/steam/core-keeper-data" | Save file location. |
