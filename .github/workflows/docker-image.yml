@@ -37,7 +37,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ github.repository }}
+            escaping/core-keeper-dedicated
             ghcr.io/${{ github.repository }}
           # generate Docker tags based on the following events/attributes
           tags: |
@@ -50,7 +50,6 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v5
         with:
-          context: .
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
