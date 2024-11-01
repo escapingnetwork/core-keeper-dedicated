@@ -5,57 +5,82 @@ FROM cm2network/steamcmd:root
 
 LABEL maintainer="leandro.martin@protonmail.com"
 
-ENV STEAMAPPID 1007
-ENV STEAMAPPID_TOOL 1963720
-ENV STEAMAPP core-keeper
-ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
-ENV STEAMAPPDATADIR "${HOMEDIR}/${STEAMAPP}-data"
-ENV DLURL https://raw.githubusercontent.com/escapingnetwork/core-keeper-dedicated
-
-COPY ./entry.sh ${HOMEDIR}/entry.sh
-COPY ./launch.sh ${HOMEDIR}/launch.sh
+ENV STEAMAPPID=1007
+ENV STEAMAPPID_TOOL=1963720
+ENV STEAMAPP=core-keeper
+ENV STEAMAPPDIR="${HOMEDIR}/${STEAMAPP}-dedicated"
+ENV STEAMAPPDATADIR="${HOMEDIR}/${STEAMAPP}-data"
+ENV SCRIPTSDIR="${HOMEDIR}/scripts"
+ENV MODSDIR="${STEAMAPPDATADIR}/StreamingAssets/Mods"
+ENV DLURL=https://raw.githubusercontent.com/escapingnetwork/core-keeper-dedicated
 
 RUN dpkg --add-architecture i386
 
 # Install Core Keeper server dependencies and clean up
-# libx32gcc-s1 lib32gcc-s1 build-essential <- fixes tile generation bug (obsidian wall around spawn) without graphic cards mounted to server
-# need all 3 + dpkg i do not know why but every other combination would run the server at an extreme speed - that combination worked for me.
-# Thanks to https://www.reddit.com/r/CoreKeeperGame/comments/uym86p/comment/iays04w/?utm_source=share&utm_medium=web2x&context=3
 RUN set -x \
-	&& apt-get update \
-	&& apt-get install -y --no-install-recommends --no-install-suggests \
-	xvfb mesa-utils libx32gcc-s1 lib32gcc-s1 build-essential libxi6 x11-utils tini \
-	&& mkdir -p "${STEAMAPPDIR}" \
-	&& mkdir -p "${STEAMAPPDATADIR}" \
-	&& chmod +x "${HOMEDIR}/entry.sh" \
-	&& chmod +x "${HOMEDIR}/launch.sh" \
-	&& chown -R "${USER}:${USER}" "${HOMEDIR}/entry.sh" "${HOMEDIR}/launch.sh" "${STEAMAPPDIR}" "${STEAMAPPDATADIR}" \
-	&& rm -rf /var/lib/apt/lists/*
+    && apt-get update \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+        xvfb \
+        libxi6 \
+        tini \
+        tzdata \
+        gosu \
+        jo \
+        gettext-base \
+    && rm -rf /var/lib/apt/lists/*
 
+# Setup X11 Sockets folder
 RUN mkdir /tmp/.X11-unix \
-	&& chown -R "${USER}:${USER}" /tmp/.X11-unix
+    && chmod 1777 /tmp/.X11-unix \
+    && chown root /tmp/.X11-unix
 
+# Setup folders
+COPY ./scripts ${SCRIPTSDIR}
+RUN set -x \
+    && chmod +x -R "${SCRIPTSDIR}" \
+    && mkdir -p "${STEAMAPPDIR}" \
+    && mkdir -p "${STEAMAPPDATADIR}" \
+    && chown -R "${USER}:${USER}" "${SCRIPTSDIR}" "${STEAMAPPDIR}" "${STEAMAPPDATADIR}"
 
-ENV WORLD_INDEX=0 \
-	WORLD_NAME="Core Keeper Server" \
-	WORLD_SEED=0 \
-	WORLD_MODE=0 \
-	GAME_ID="" \
-	DATA_PATH="${STEAMAPPDATADIR}" \
-	MAX_PLAYERS=10 \
-	SEASON=-1 \
-	SERVER_IP="" \
-    SERVER_PORT=""
-
-# Switch to user
-USER ${USER}
+# Declare envs and their default values
+ENV PUID=1000 \
+    PGID=1000 \
+    WORLD_INDEX=0 \
+    WORLD_NAME="Core Keeper Server" \
+    WORLD_SEED=0 \
+    WORLD_MODE=0 \
+    GAME_ID="" \
+    DATA_PATH="${STEAMAPPDATADIR}" \
+    MAX_PLAYERS=10 \
+    SEASON="" \
+    SERVER_IP="" \
+    SERVER_PORT="" \
+    DISCORD_WEBHOOK_URL="" \
+    # Player Join
+    DISCORD_PLAYER_JOIN_ENABLED=true \
+    DISCORD_PLAYER_JOIN_MESSAGE='${char_name} (${steamid}) has joined the server.' \
+    DISCORD_PLAYER_JOIN_TITLE="Player Joined" \
+    DISCORD_PLAYER_JOIN_COLOR="47456" \
+    # Player Leave
+    DISCORD_PLAYER_LEAVE_ENABLED=true \
+    DISCORD_PLAYER_LEAVE_MESSAGE='${char_name} (${steamid}) has disconnected. Reason: ${reason}.' \
+    DISCORD_PLAYER_LEAVE_TITLE="Player Left" \
+    DISCORD_PLAYER_LEAVE_COLOR="11477760" \
+    # Server Start
+    DISCORD_SERVER_START_ENABLED=true \
+    DISCORD_SERVER_START_MESSAGE='**World:** ${world_name}\n**GameID:** ${gameid}' \
+    DISCORD_SERVER_START_TITLE="Server Started" \
+    DISCORD_SERVER_START_COLOR="2013440" \
+    # Server Stop
+    DISCORD_SERVER_STOP_ENABLED=true \
+    DISCORD_SERVER_STOP_MESSAGE="" \
+    DISCORD_SERVER_STOP_TITLE="Server Stopped" \
+    DISCORD_SERVER_STOP_COLOR="12779520"
 
 # Switch to workdir
 WORKDIR ${HOMEDIR}
 
-VOLUME ${STEAMAPPDIR}
-
 # Use tini as the entrypoint for signal handling
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
-CMD ["bash", "entry.sh"]
+CMD ["bash", "scripts/entry.sh"]

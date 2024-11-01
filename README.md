@@ -25,9 +25,7 @@ Create two directories where you want to run your server :
 ### Using Docker Compose
 Create a `docker-compose.yml` with the following content:
 
-```
-version: "3"
-
+```yml
 services:
   core-keeper:
     container_name: core-keeper-dedicated
@@ -45,19 +43,40 @@ volumes:
 ```
 
 Create a `core.env` file, it should contain the environment variables for the dedicated server, see configuration for reference. Example:
-```
+```env
+PUID=1000
+PGID=1000
 WORLD_INDEX=0
-WORLD_NAME=Core Keeper Server
+WORLD_NAME="Core Keeper Server"
 WORLD_SEED=0
 WORLD_MODE=0
-GAME_ID=
-DATA_PATH=/home/steam/core-keeper-data
+GAME_ID=""
+DATA_PATH="${STEAMAPPDATADIR}"
 MAX_PLAYERS=10
-DISCORD=1
-DISCORD_HOOK=https://discord.com/api/webhooks/{id}/{token}
-SEASON=-1
-SERVER_IP=
-SERVER_PORT=
+SEASON=""
+SERVER_IP=""
+SERVER_PORT=""
+DISCORD_WEBHOOK_URL=""
+# Player Join
+DISCORD_PLAYER_JOIN_ENABLED=true
+DISCORD_PLAYER_JOIN_MESSAGE="$${char_name} ($${steamid}) has joined the server."
+DISCORD_PLAYER_JOIN_TITLE="Player Joined"
+DISCORD_PLAYER_JOIN_COLOR="47456"
+# Player Leave
+DISCORD_PLAYER_LEAVE_ENABLED=true
+DISCORD_PLAYER_LEAVE_MESSAGE="$${char_name} ($${steamid}) has disconnected. Reason: $${reason}."
+DISCORD_PLAYER_LEAVE_TITLE="Player Left"
+DISCORD_PLAYER_LEAVE_COLOR="11477760"
+# Server Start
+DISCORD_SERVER_START_ENABLED=true
+DISCORD_SERVER_START_MESSAGE="**World:** $${world_name}\n**GameID:** $${gameid}"
+DISCORD_SERVER_START_TITLE="Server Started"
+DISCORD_SERVER_START_COLOR="2013440"
+# Server Stop
+DISCORD_SERVER_STOP_ENABLED=true
+DISCORD_SERVER_STOP_MESSAGE=""
+DISCORD_SERVER_STOP_TITLE="Server Stopped"
+DISCORD_SERVER_STOP_COLOR="12779520"
 ```
 
 On the folder which contains the files run `docker-compose up -d`.
@@ -70,21 +89,39 @@ To query the game ID run:
 ## Configuration
 
 These are the arguments you can use to customize server behavior with default values.
-```
-WORLD_INDEX         Which world index to use.
-WORLD_NAME          The name to use for the server.
-WORLD_SEED          The seed to use for a new world. Set to 0 to generate random seed.
-WORLD_MODE          Sets the world mode for the world. Can be Normal (0), Hard (1), Creative (2), Casual (4). NOTE: Changing between Creative and non-Creative worlds not currently supported.
-GAME_ID             Game ID to use for the server. Need to be at least 28 characters and alphanumeric, excluding Y,y,x,0,O. Empty or not valid means a new ID will be generated at start.
-DATA_PATH           Save file location. If not set it defaults to a sub-folder named "DedicatedServer" at the default Core Keeper save location.
-MAX_PLAYERS         Maximum number of players that will be allowed to connect to server.
-DISCORD             Enables discord webhook features which sends GameID to a channel.
-DISCORD_HOOK        Webhook url (Edit channel > Integrations > Create Webhook).
-DISCORD_PRINTF_STR  The format string used to generate the content of the Discord webook. Default is `%s`, simply sending the GameID. 
-SEASON              Overrides current season by setting to any of None (0), Easter (1), Halloween (2), Christmas (3), Valentine (4), Anniversary (5), CherryBlossom (6), LunarNewYear(7). -1 is default setting where it is set depending on system date.
-SERVER_IP           Only used if port is set. Sets the address that the server will bind to.
-SERVER_PORT         What port to bind to. If not set, then the server will use the Steam relay network. If set the clients will connect to the server directly and the port needs to be open.
-```
+
+| Argument | Default | Description |
+| :---:   | :---: | :---: |
+| PUID | 1000 | The user ID on the host that the container should use for file ownership and permissions. |
+| PGID | 1000 | The group ID on the host that the container should use for file ownership and permissions. |
+| WORLD_INDEX | 0 | Which world index to use. |
+| WORLD_NAME | "Core Keeper Server" | The name to use for the server. |
+| WORLD_SEED | 0 | The seed to use for a new world. Set to 0 to generate random seed. |
+| WORLD_MODE | 0 | Sets the world mode for the world. Can be Normal (0), Hard (1), Creative (2), Casual (4). |
+| SEASON | No Default | Overrides current season by setting to any of None (0), Easter (1), Halloween (2), Christmas (3), Valentine (4), Anniversary (5), CherryBlossom (6), LunarNewYear(7).<br/>**Do not set this env var if you want real date season.** |
+| GAME_ID | "" |  Game ID to use for the server. Need to be at least 28 characters and alphanumeric, excluding Y,y,x,0,O. Empty or not valid means a new ID will be generated at start. |
+| MAX_PLAYERS | 10 | Maximum number of players that will be allowed to connect to server. |
+| DATA_PATH | "/home/steam/core-keeper-data" | Save file location. |
+| SERVER_IP | No Default | Only used if port is set. Sets the address that the server will bind to. |
+| SERVER_PORT | No Default | What port to bind to. If not set, then the server will use the Steam relay network. If set the clients will connect to the server directly and the port needs to be open. |
+| DISCORD_WEBHOOK_URL | "" | Webhook url (Edit channel > Integrations > Create Webhook). |
+| DISCORD_PLAYER_JOIN_ENABLED | true | Enable/Disable message on player join |
+| DISCORD_PLAYER_JOIN_MESSAGE | `"$${char_name} ($${steamid}) has joined the server."` | Embed message |
+| DISCORD_PLAYER_JOIN_TITLE | "Player Joined" | Embed title |
+| DISCORD_PLAYER_JOIN_COLOR | "47456" | Embed color |
+| DISCORD_PLAYER_LEAVE_ENABLED | true | Enable/Disable message on player leave |
+| DISCORD_PLAYER_LEAVE_MESSAGE | `"$${char_name} ($${steamid}) has disconnected. Reason: $${reason}."` | Embed message |
+| DISCORD_PLAYER_LEAVE_TITLE | "Player Left" | Embed title |
+| DISCORD_PLAYER_LEAVE_COLOR | "11477760" | Embed color |
+| DISCORD_SERVER_START_ENABLED | true | Enable/Disable message on server start |
+| DISCORD_SERVER_START_MESSAGE | `"**World:** $${world_name}\n**GameID:** $${gameid}"` | Embed message |
+| DISCORD_SERVER_START_TITLE | "Server Started" | Embed title |
+| DISCORD_SERVER_START_COLOR | "2013440" | Embed color |
+| DISCORD_SERVER_STOP_ENABLED | true | Enable/Disable message on server stop |
+| DISCORD_SERVER_STOP_MESSAGE | "" | Embed message |
+| DISCORD_SERVER_STOP_TITLE | "Server Stopped" | Embed title |
+| DISCORD_SERVER_STOP_COLOR | "12779520" | Embed color |
+
                           
 ### Contributors
 <a href="https://github.com/escapingnetwork/core-keeper-dedicated/graphs/contributors">
