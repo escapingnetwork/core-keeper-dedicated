@@ -1,7 +1,11 @@
 ###########################################################
 # Dockerfile that builds a Core Keeper Gameserver
 ###########################################################
-FROM cm2network/steamcmd:root
+FROM cm2network/steamcmd:root AS base-amd64
+FROM --platform=arm64 sonroyaalmerol/steamcmd-arm64:root-2024-11-24 AS base-arm64
+
+ARG TARGETARCH
+FROM base-${TARGETARCH}
 
 LABEL maintainer="leandro.martin@protonmail.com"
 
@@ -14,7 +18,10 @@ ENV SCRIPTSDIR="${HOMEDIR}/scripts"
 ENV MODSDIR="${STEAMAPPDATADIR}/StreamingAssets/Mods"
 ENV DLURL=https://raw.githubusercontent.com/escapingnetwork/core-keeper-dedicated
 
-RUN dpkg --add-architecture i386
+ARG TARGETARCH
+RUN case "${TARGETARCH}" in \
+    "amd64") dpkg --add-architecture i386 ;; \
+    esac
 
 # Install Core Keeper server dependencies and clean up
 RUN set -x \
@@ -27,12 +34,55 @@ RUN set -x \
         gosu \
         jo \
         gettext-base \
+        unzip \
+	wget \
     && rm -rf /var/lib/apt/lists/*
+
+RUN case "${TARGETARCH}" in \
+    "arm64") apt-get update \
+        && apt-get install -y --no-install-recommends --no-install-suggests \
+            libmonosgen-2.0-1 \
+            libdbus-1-3 \
+            libxcursor1 \
+            libxinerama1 \
+            libxss1 \
+            libatomic1 \
+            libpulse0 \
+	&& rm -rf /var/lib/apt/lists/* ;; \
+    esac
+
+# Download Depot downloader
+ARG DEPOT_DOWNLOADER_VERSION="2.7.4"
+RUN case "${TARGETARCH}" in \
+        "amd64") DEPOT_DOWNLOADER_FILENAME=DepotDownloader-linux-x64.zip ;; \
+        "arm64") DEPOT_DOWNLOADER_FILENAME=DepotDownloader-linux-arm64.zip ;; \
+    esac \
+    && wget --progress=dot:giga "https://github.com/SteamRE/DepotDownloader/releases/download/DepotDownloader_${DEPOT_DOWNLOADER_VERSION}/${DEPOT_DOWNLOADER_FILENAME}" -O DepotDownloader.zip \
+    && unzip DepotDownloader.zip \
+    && rm -rf DepotDownloader.xml \
+    && chmod +x DepotDownloader \
+    && mv DepotDownloader /usr/local/bin/DepotDownloader
 
 # Setup X11 Sockets folder
 RUN mkdir /tmp/.X11-unix \
     && chmod 1777 /tmp/.X11-unix \
     && chown root /tmp/.X11-unix
+
+# Box64/86 configuration
+ENV BOX64_DYNAREC_BIGBLOCK=0 \
+    BOX64_DYNAREC_SAFEFLAGS=2 \
+    BOX64_DYNAREC_STRONGMEM=3 \
+    BOX64_DYNAREC_FASTROUND=0 \
+    BOX64_DYNAREC_FASTNAN=0 \
+    BOX64_DYNAREC_X87DOUBLE=1 \
+    BOX64_DYNAREC_BLEEDING_EDGE=0 \
+    BOX86_DYNAREC_BIGBLOCK=0 \
+    BOX86_DYNAREC_SAFEFLAGS=2 \
+    BOX86_DYNAREC_STRONGMEM=3 \
+    BOX86_DYNAREC_FASTROUND=0 \
+    BOX86_DYNAREC_FASTNAN=0 \
+    BOX86_DYNAREC_X87DOUBLE=1 \
+    BOX86_DYNAREC_BLEEDING_EDGE=0
 
 # Setup folders
 COPY ./scripts ${SCRIPTSDIR}
@@ -45,6 +95,7 @@ RUN set -x \
 # Declare envs and their default values
 ENV PUID=1000 \
     PGID=1000 \
+    USE_DEPOT_DOWNLOADER=false \
     WORLD_INDEX=0 \
     WORLD_NAME="Core Keeper Server" \
     WORLD_SEED=0 \

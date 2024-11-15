@@ -11,6 +11,17 @@ Explore an endless cavern of creatures, relics and resources in a mining sandbox
 
 ## How to run
 
+### ARM based configuration
+
+This image currently includes the following Box64 build variants for the following devices:
+
+- Generic [generic]
+- Raspberry Pi 5 [rpi5]
+- M1 (M-Series) Mac [m1]
+- ADLink Ampere Altra (Oracle ARM CPUs) [adlink]
+
+By default it is set to use `generic`. If you want to use another one, change the enviromental variable `ARM64_DEVICE` at the `core.env` file.
+
 ### Volumes
 
 Create two directories where you want to run your server :
@@ -46,6 +57,8 @@ Create a `core.env` file, it should contain the environment variables for the de
 ```env
 PUID=1000
 PGID=1000
+ARM64_DEVICE=generic
+USE_DEPOT_DOWNLOADER=false
 WORLD_INDEX=0
 WORLD_NAME="Core Keeper Server"
 WORLD_SEED=0
@@ -94,6 +107,8 @@ These are the arguments you can use to customize server behavior with default va
 | :---:   | :---: | :---: |
 | PUID | 1000 | The user ID on the host that the container should use for file ownership and permissions. |
 | PGID | 1000 | The group ID on the host that the container should use for file ownership and permissions. |
+| ARM64_DEVICE | generic | The Box64 build variants. Accepts `generic`, `rpi5`, `m1` and `adlink`. |
+| USE_DEPOT_DOWNLOADER | false | Use Depot downloader instead of steamcmd. Useful for system not compatible with 32 bits. | 
 | WORLD_INDEX | 0 | Which world index to use. |
 | WORLD_NAME | "Core Keeper Server" | The name to use for the server. |
 | WORLD_SEED | 0 | The seed to use for a new world. Set to 0 to generate random seed. |
