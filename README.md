@@ -16,7 +16,10 @@ Explore an endless cavern of creatures, relics and resources in a mining sandbox
 This image currently includes the following Box64 build variants for the following devices:
 
 - Generic [generic]
-- Raspberry Pi 5 [rpi5]
+- Raspberry Pi 3 [rpi3]
+- Raspberry Pi 4 [rpi4]
+- Raspberry Pi 5 (4K page size) [rpi5]
+- Raspberry Pi 5 (16K page size) [rpi5_16k]
 - M1 (M-Series) Mac [m1]
 - ADLink Ampere Altra (Oracle ARM CPUs) [adlink]
 
@@ -31,7 +34,7 @@ Create two directories where you want to run your server :
 
 ### Using Docker CLI:
 
-`docker run -d -e WORLD_NAME="Core Keeper Server" -e MAX_PLAYERS=5 -v $(pwd)/server-data:/home/steam/core-keeper-data --name core-keeper-dedicated escaping/core-keeper-dedicated`
+`docker run -d -e WORLD_NAME="Core Keeper Server" -e MAX_PLAYERS=5 -p 27015:27015/udp -v $(pwd)/server-data:/home/steam/core-keeper-data --name core-keeper-dedicated escaping/core-keeper-dedicated`
 
 ### Using Docker Compose
 Create a `docker-compose.yml` with the following content:
@@ -41,55 +44,25 @@ services:
   core-keeper:
     container_name: core-keeper-dedicated
     image: escaping/core-keeper-dedicated
+    ports:
+      - "$SERVER_PORT:$SERVER_PORT/udp"
     volumes:
       - server-files:/home/steam/core-keeper-dedicated
       - server-data:/home/steam/core-keeper-data
+    restart: unless-stopped
     env_file:
-      - ./core.env
-    restart: always
+      - path: override.env
+        required: false
     stop_grace_period: 2m
 volumes:
     server-files:
     server-data:
 ```
 
-Create a `core.env` file, it should contain the environment variables for the dedicated server, see configuration for reference. Example:
+Create a `override.env` file and override the desired enviromental variables for the dedicated server, see configuration for reference. Example:
 ```env
-PUID=1000
-PGID=1000
-ARM64_DEVICE=generic
-USE_DEPOT_DOWNLOADER=false
-WORLD_INDEX=0
-WORLD_NAME="Core Keeper Server"
-WORLD_SEED=0
-WORLD_MODE=0
-GAME_ID=""
-DATA_PATH="${STEAMAPPDATADIR}"
-MAX_PLAYERS=10
-SEASON=""
-SERVER_IP=""
-SERVER_PORT=""
-DISCORD_WEBHOOK_URL=""
-# Player Join
-DISCORD_PLAYER_JOIN_ENABLED=true
-DISCORD_PLAYER_JOIN_MESSAGE="$${char_name} ($${steamid}) has joined the server."
-DISCORD_PLAYER_JOIN_TITLE="Player Joined"
-DISCORD_PLAYER_JOIN_COLOR="47456"
-# Player Leave
-DISCORD_PLAYER_LEAVE_ENABLED=true
-DISCORD_PLAYER_LEAVE_MESSAGE="$${char_name} ($${steamid}) has disconnected. Reason: $${reason}."
-DISCORD_PLAYER_LEAVE_TITLE="Player Left"
-DISCORD_PLAYER_LEAVE_COLOR="11477760"
-# Server Start
-DISCORD_SERVER_START_ENABLED=true
-DISCORD_SERVER_START_MESSAGE="**World:** $${world_name}\n**GameID:** $${gameid}"
-DISCORD_SERVER_START_TITLE="Server Started"
-DISCORD_SERVER_START_COLOR="2013440"
-# Server Stop
-DISCORD_SERVER_STOP_ENABLED=true
-DISCORD_SERVER_STOP_MESSAGE=""
-DISCORD_SERVER_STOP_TITLE="Server Stopped"
-DISCORD_SERVER_STOP_COLOR="12779520"
+ARM64_DEVICE=rpi5
+MAX_PLAYERS=3
 ```
 
 On the folder which contains the files run `docker-compose up -d`.
@@ -115,10 +88,10 @@ These are the arguments you can use to customize server behavior with default va
 | WORLD_MODE | 0 | Sets the world mode for the world. Can be Normal (0), Hard (1), Creative (2), Casual (4). |
 | SEASON | No Default | Overrides current season by setting to any of None (0), Easter (1), Halloween (2), Christmas (3), Valentine (4), Anniversary (5), CherryBlossom (6), LunarNewYear(7).<br/>**Do not set this env var if you want real date season.** |
 | GAME_ID | "" |  Game ID to use for the server. Need to be at least 28 characters and alphanumeric, excluding Y,y,x,0,O. Empty or not valid means a new ID will be generated at start. |
-| MAX_PLAYERS | 10 | Maximum number of players that will be allowed to connect to server. |
 | DATA_PATH | "/home/steam/core-keeper-data" | Save file location. |
+| MAX_PLAYERS | 10 | Maximum number of players that will be allowed to connect to server. |
 | SERVER_IP | No Default | Only used if port is set. Sets the address that the server will bind to. |
-| SERVER_PORT | No Default | What port to bind to. If not set, then the server will use the Steam relay network. If set the clients will connect to the server directly and the port needs to be open. |
+| SERVER_PORT | 27015 | What port to bind to. 27015 is the Steam relay port. |
 | DISCORD_WEBHOOK_URL | "" | Webhook url (Edit channel > Integrations > Create Webhook). |
 | DISCORD_PLAYER_JOIN_ENABLED | true | Enable/Disable message on player join |
 | DISCORD_PLAYER_JOIN_MESSAGE | `"$${char_name} ($${steamid}) has joined the server."` | Embed message |

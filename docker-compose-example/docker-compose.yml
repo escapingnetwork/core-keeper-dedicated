@@ -8,8 +8,9 @@ services:
       - server-files:/home/steam/core-keeper-dedicated
       - server-data:/home/steam/core-keeper-data
     env_file:
-      - ./core.env
-    restart: always
+      - path: override.env
+        required: false
+    restart: unless-stopped
     stop_grace_period: 2m
 volumes:
     server-files:
