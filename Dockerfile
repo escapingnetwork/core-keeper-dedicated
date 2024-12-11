@@ -2,7 +2,7 @@
 # Dockerfile that builds a Core Keeper Gameserver
 ###########################################################
 FROM cm2network/steamcmd:root AS base-amd64
-FROM --platform=arm64 sonroyaalmerol/steamcmd-arm64:root-2024-12-04 AS base-arm64
+FROM --platform=arm64 sonroyaalmerol/steamcmd-arm64:root-2024-12-08 AS base-arm64
 
 ARG TARGETARCH
 FROM base-${TARGETARCH}

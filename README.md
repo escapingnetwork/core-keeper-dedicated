@@ -17,7 +17,7 @@ This image currently includes the following Box64 build variants for the followi
 
 - Generic [generic]
 - Raspberry Pi 3 [rpi3]
-- Raspberry Pi 4 [rpi4]
+- Raspberry Pi 4 [rpi4-pre3]
 - Raspberry Pi 5 (4K page size) [rpi5]
 - Raspberry Pi 5 (16K page size) [rpi5_16k]
 - M1 (M-Series) Mac [m1]
