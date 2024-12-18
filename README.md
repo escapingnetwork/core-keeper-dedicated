@@ -34,7 +34,7 @@ Create two directories where you want to run your server :
 
 ### Using Docker CLI:
 
-`docker run -d -e WORLD_NAME="Core Keeper Server" -e MAX_PLAYERS=5 -p 27015:27015/udp -v $(pwd)/server-data:/home/steam/core-keeper-data --name core-keeper-dedicated escaping/core-keeper-dedicated`
+`docker run -d -e WORLD_NAME="Core Keeper Server" -e MAX_PLAYERS=5 -p 27000:27050/tcp -p 27000:27050/udp -v $(pwd)/server-data:/home/steam/core-keeper-data --name core-keeper-dedicated escaping/core-keeper-dedicated`
 
 ### Using Docker Compose
 Create a `docker-compose.yml` with the following content:
@@ -45,7 +45,8 @@ services:
     container_name: core-keeper-dedicated
     image: escaping/core-keeper-dedicated
     ports:
-      - "$SERVER_PORT:$SERVER_PORT/udp"
+      - "27000:27050/tcp"
+      - "27000:27050/udp"
     volumes:
       - server-files:/home/steam/core-keeper-dedicated
       - server-data:/home/steam/core-keeper-data
@@ -91,7 +92,6 @@ These are the arguments you can use to customize server behavior with default va
 | DATA_PATH | "/home/steam/core-keeper-data" | Save file location. |
 | MAX_PLAYERS | 10 | Maximum number of players that will be allowed to connect to server. |
 | SERVER_IP | No Default | Only used if port is set. Sets the address that the server will bind to. |
-| SERVER_PORT | 27015 | What port to bind to. 27015 is the Steam relay port. |
 | DISCORD_WEBHOOK_URL | "" | Webhook url (Edit channel > Integrations > Create Webhook). |
 | DISCORD_PLAYER_JOIN_ENABLED | true | Enable/Disable message on player join |
 | DISCORD_PLAYER_JOIN_MESSAGE | `"$${char_name} ($${steamid}) has joined the server."` | Embed message |
