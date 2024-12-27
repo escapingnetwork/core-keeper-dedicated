@@ -6,7 +6,7 @@ LogParser() {
     while IFS= read -r line; do
         echo "$line"
 
-        if [[ "$line" == *"] player "* ]]; then
+        if [[ "$line" == "[userid:"*"] player"*"connected islocalplayer="* ]]; then
 
             # Extract the steamid and character name
             steamid=$(echo "$line" | awk -F'[[]|[ :]+|[]]' '{print $3}')
