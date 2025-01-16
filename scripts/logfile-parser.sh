@@ -6,11 +6,11 @@ LogParser() {
     while IFS= read -r line; do
         echo "$line"
 
-        if [[ "$line" == *"is using new name"* ]]; then
+        if [[ "$line" == "[userid:"*"] player"*"connected islocalplayer="* ]]; then
 
             # Extract the steamid and character name
             steamid=$(echo "$line" | awk -F'[[]|[ :]+|[]]' '{print $3}')
-            char_name=$(echo "$line" | awk -F'new name ' '{print $2}')
+            char_name=$(echo "$line" | awk -F'player | connected' '{print $2}')
             LogDebug "Character Name: $char_name ($steamid)"
 
             # Store character name for future use
