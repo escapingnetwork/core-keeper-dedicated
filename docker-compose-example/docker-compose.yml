@@ -3,7 +3,8 @@ services:
     container_name: core-keeper-dedicated
     image: escaping/core-keeper-dedicated
     ports:
-      - "$SERVER_PORT:$SERVER_PORT/udp"
+      - "27000:27050/tcp"
+      - "27000:27050/udp"
     volumes:
       - server-files:/home/steam/core-keeper-dedicated
       - server-data:/home/steam/core-keeper-data
