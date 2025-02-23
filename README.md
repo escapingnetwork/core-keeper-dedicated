@@ -81,7 +81,7 @@ These are the arguments you can use to customize server behavior with default va
 | PUID | 1000 | The user ID on the host that the container should use for file ownership and permissions. |
 | PGID | 1000 | The group ID on the host that the container should use for file ownership and permissions. |
 | ARM64_DEVICE | generic | The Box64 build variants. Accepts `generic`, `rpi5`, `m1` and `adlink`. |
-| USE_DEPOT_DOWNLOADER | false | Use Depot downloader instead of steamcmd. Useful for system not compatible with 32 bits. | 
+| USE_DEPOT_DOWNLOADER | false | Use Depot downloader instead of steamcmd. Useful for system not compatible with 32 bits. |
 | WORLD_INDEX | 0 | Which world index to use. |
 | WORLD_NAME | "Core Keeper Server" | The name to use for the server. |
 | WORLD_SEED | "" | The seed to use for a new world. Set to "" to generate random seed. |
@@ -109,8 +109,50 @@ These are the arguments you can use to customize server behavior with default va
 | DISCORD_SERVER_STOP_MESSAGE | "" | Embed message |
 | DISCORD_SERVER_STOP_TITLE | "Server Stopped" | Embed title |
 | DISCORD_SERVER_STOP_COLOR | "12779520" | Embed color |
+| MODS_ENABLED | false | Enable/Disable mod support |
+| MODIO_API_KEY | "" | mod.io API key |
+| MODIO_API_URL | "" | mod.io API path |
+| MODS | "" | List of mods to install |
 
-                          
+## Mod Support
+
+The container supports automatically installing mods from [mod.io](https://mod.io/g/corekeeper).
+
+1. Get a mod.io API key from [mod.io/me/access](https://mod.io/me/access)
+  - You'll need the API path that is generated along with the key (e.g. https://u-*.modapi.io/v1)
+2. Set the necessary environment variables in your `override.env` file (or in your `docker-compose.yml`)
+  - `MODS_ENABLED=true`
+  - `MODIO_API_KEY=your_api_key`
+  - `MODIO_API_URL=your_api_url`
+
+### Specify mods to install
+
+You'll need the mod.io ID for each mod you want to install. The ID can be found on mod's page in the info panel on the right side.
+
+Mods must be specified in your `docker-compose.yml` like this:
+
+```yml
+environment:
+  # Each mod on a new line. Format: <mod_id>[:<version>] [# comment]
+  - |
+    MODS=
+    3177992 # CoreLib
+    3456857 # CoreLib.Localization
+    3456859 # CoreLib.RewiredExtension
+    4315799 # CK QOL
+```
+
+Each mod is on its own line in the format:
+
+- `<mod_id>` - The numeric ID of the mod from mod.io
+- `:<version>` - (Optional) Specific version to install
+- `# comment` - (Optional) Comment to help identify the mod
+
+If `version` is not specified, the latest version will be installed.
+
+> [!WARNING]
+> Installing a client-only mod can cause the server to not start. Don't install client-only mods (they wouldn't do anything anyway).
+
 ### Contributors
 <a href="https://github.com/escapingnetwork/core-keeper-dedicated/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=escapingnetwork/core-keeper-dedicated" />

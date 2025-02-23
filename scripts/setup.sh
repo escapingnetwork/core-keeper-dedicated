@@ -29,4 +29,10 @@ else
     "$STEAMCMDDIR/steamcmd.sh" "${args[@]}"
 fi
 
+# Manage mods if enabled
+if [[ "${MODS_ENABLED,,}" == "true" ]]; then
+    source "${SCRIPTSDIR}/mod-manager.sh"
+    manage_mods
+fi
+
 exec bash "${SCRIPTSDIR}/launch.sh"
