@@ -59,7 +59,7 @@ volumes:
     server-data:
 ```
 
-Create a `override.env` file and override the desired enviromental variables for the dedicated server, see configuration for reference. Example:
+Create a `override.env` file and override the desired environmental variables for the dedicated server, see configuration for reference. Example:
 ```env
 ARM64_DEVICE=rpi5
 MAX_PLAYERS=3
@@ -124,34 +124,34 @@ The container supports automatically installing mods from [mod.io](https://mod.i
   - `MODS_ENABLED=true`
   - `MODIO_API_KEY=your_api_key`
   - `MODIO_API_URL=your_api_url`
+  - `MODS=mod1,mod2` (see below)
 
 ### Specify mods to install
 
-You'll need the mod.io ID for each mod you want to install. The ID can be found on mod's page in the info panel on the right side.
+> [!WARNING]
+> Installing a client-only mod can cause the server to not start. Don't install client-only mods (they wouldn't do anything on the server anyway).
 
-Mods must be specified in your `docker-compose.yml` like this:
+> [!IMPORTANT]
+> Mod dependencies are not automatically installed. You must look at the dependencies for each mod you want to install and add their dependencies to the list.
 
-```yml
-environment:
-  # Each mod on a new line. Format: <mod_id>[:<version>] [# comment]
-  - |
-    MODS=
-    3177992 # CoreLib
-    3456857 # CoreLib.Localization
-    3456859 # CoreLib.RewiredExtension
-    4315799 # CK QOL
+You'll need to get the mod string ID from mod.io for each mod you want to install. The easiest way to do this is to grab it from the URL.
+
+For example, looking at the URL for [CoreLib](https://mod.io/g/corekeeper/m/core-lib) (`https://mod.io/g/corekeeper/m/core-lib`), you would use `core-lib`.
+
+Specify mods as a comma-separated list, optionally providing a version:
+
+```sh
+# Format: <mod_id>[:<version>], ...
+MODS=core-lib,coreliblocalization,corelibrewiredextension,ck-qol
 ```
 
-Each mod is on its own line in the format:
+Example using specific versions:
 
-- `<mod_id>` - The numeric ID of the mod from mod.io
-- `:<version>` - (Optional) Specific version to install
-- `# comment` - (Optional) Comment to help identify the mod
+```sh
+MODS=core-lib,coreliblocalization,corelibrewiredextension:3.0.1,ck-qol:1.9.4
+```
 
 If `version` is not specified, the latest version will be installed.
-
-> [!WARNING]
-> Installing a client-only mod can cause the server to not start. Don't install client-only mods (they wouldn't do anything anyway).
 
 ### Contributors
 <a href="https://github.com/escapingnetwork/core-keeper-dedicated/graphs/contributors">

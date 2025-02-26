@@ -7,19 +7,11 @@ services:
     volumes:
       - server-files:/home/steam/core-keeper-dedicated
       - server-data:/home/steam/core-keeper-data
-    environment:
-      # Each mod on a new line. Format: <mod_id>[:<version>] [# comment]
-      - |
-        MODS=
-        3177992 # CoreLib
-        3456857 # CoreLib.Localization
-        3456859 # CoreLib.RewiredExtension
-        4315799 # CK QOL
     env_file:
       - path: override.env
         required: false
     restart: unless-stopped
     stop_grace_period: 2m
 volumes:
-    server-files:
-    server-data:
+  server-files:
+  server-data:

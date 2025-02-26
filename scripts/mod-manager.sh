@@ -2,8 +2,7 @@
 source "${SCRIPTSDIR}/helper-functions.sh"
 
 MODS_MANIFEST="${MODSDIR}/.manifest"
-MODIO_CORE_KEEPER_ID="5289"
-MODIO_CORE_KEEPER_ENDPOINT="${MODIO_API_URL}/games/${MODIO_CORE_KEEPER_ID}/mods"
+MODIO_CORE_KEEPER_ENDPOINT="${MODIO_API_URL}/games/@corekeeper/mods"
 
 mkdir -p "${MODSDIR}"
 
@@ -13,17 +12,19 @@ download_and_install_mod() {
     return 1
   fi
 
-  local mod_id="$1"
+  local mod_string_id="$1"
   local version="$2"
+
+  # The mod.io API needs the mod string id to be prefixed with @
+  local modio_mod_endpoint="${MODIO_CORE_KEEPER_ENDPOINT}/@${mod_string_id}"
   local download_url
   local actual_version
 
   local mod_info
-  mod_info=$(curl -s \
-    "${MODIO_CORE_KEEPER_ENDPOINT}/${mod_id}?api_key=${MODIO_API_KEY}")
+  mod_info=$(curl -s "${modio_mod_endpoint}?api_key=${MODIO_API_KEY}")
 
   if [ -z "$mod_info" ]; then
-    LogError "Failed to get mod info for mod ID ${mod_id}"
+    LogError "Failed to get mod info for mod ${mod_string_id}"
     return 1
   fi
 
@@ -33,18 +34,17 @@ download_and_install_mod() {
   if [ -n "$version" ]; then
     # Get all files for the mod
     local mod_files
-    mod_files=$(curl -s \
-      "${MODIO_CORE_KEEPER_ENDPOINT}/${mod_id}/files?api_key=${MODIO_API_KEY}")
+    mod_files=$(curl -s "${modio_mod_endpoint}/files?api_key=${MODIO_API_KEY}")
 
     if [ -z "$mod_files" ]; then
-      LogError "Failed to get mod files for ${mod_name} (${mod_id})"
+      LogError "Failed to get mod files for ${mod_name} (${mod_string_id})"
       return 1
     fi
 
     # Find the specified version
     download_url=$(echo "$mod_files" | jq -r ".data[] | select(.version == \"${version}\") | .download.binary_url")
     if [ -z "$download_url" ] || [ "$download_url" = "null" ]; then
-      LogError "Version ${version} not isDirNameInManifest for mod ${mod_name} (${mod_id})"
+      LogError "Version ${version} not found for mod ${mod_name} (${mod_string_id})"
       return 1
     fi
     actual_version="$version"
@@ -55,16 +55,16 @@ download_and_install_mod() {
   fi
 
   if [ -z "$download_url" ] || [ "$download_url" = "null" ]; then
-    LogError "Failed to get download URL for mod ${mod_name} (${mod_id})"
+    LogError "Failed to get download URL for mod ${mod_name} (${mod_string_id})"
     return 1
   fi
 
   # Create temp directory for download
   local temp_dir
   temp_dir=$(mktemp -d)
-  local temp_mod_download="${temp_dir}/${mod_id}.zip"
+  local temp_mod_download="${temp_dir}/${mod_string_id}.zip"
 
-  local mod_dir="${MODSDIR}/${mod_id}"
+  local mod_dir="${MODSDIR}/${mod_string_id}"
 
   # Download and extract mod
   if curl -s -L "${download_url}?api_key=${MODIO_API_KEY}" -o "${temp_mod_download}"; then
@@ -76,10 +76,10 @@ download_and_install_mod() {
     unzip -q "${temp_mod_download}" -d "${mod_dir}"
 
     # Update manifest
-    echo "${mod_id}:${actual_version}" >> "${MODS_MANIFEST}.tmp"
-    LogInfo "Installed ${mod_name} (${mod_id}) ${actual_version}"
+    echo "${mod_string_id}:${actual_version}" >> "${MODS_MANIFEST}.tmp"
+    LogInfo "Installed ${mod_name} (${mod_string_id}) ${actual_version}"
   else
-    LogError "Failed to install ${mod_name} (${mod_id}) ${actual_version}"
+    LogError "Failed to install ${mod_name} (${mod_string_id}) ${actual_version}"
     return 1
   fi
 
@@ -90,8 +90,8 @@ download_and_install_mod() {
 cleanup_mods() {
   local installed_mods=()
   if [ -f "${MODS_MANIFEST}" ]; then
-    while IFS=: read -r mod_id _; do
-      installed_mods+=("$mod_id")
+    while IFS=: read -r mod_string_id _; do
+      installed_mods+=("$mod_string_id")
     done < "${MODS_MANIFEST}"
   fi
 
@@ -125,29 +125,27 @@ cleanup_mods() {
 }
 
 install_mods() {
-  # Read each line, ignore comments and empty lines
-  while IFS= read -r line || [ -n "$line" ]; do
-    # Skip empty lines and comments
-    [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+  # Split the comma-separated list of mods
+  IFS=',' read -ra mod_list <<< "$MODS"
 
-    # Extract mod spec (remove comments and trim)
-    local mod_spec
-    mod_spec=$(echo "$line" | sed 's/#.*$//' | tr -d '[:space:]')
+  for mod_spec in "${mod_list[@]}"; do
+    # Trim whitespace
+    mod_spec=$(echo "$mod_spec" | tr -d '[:space:]')
     [ -z "$mod_spec" ] && continue
 
-    local mod_id
+    local mod_string_id
     local version
     # Split into id and version
     if [[ "$mod_spec" =~ ":" ]]; then
-      mod_id="${mod_spec%%:*}" # Everything before the colon
+      mod_string_id="${mod_spec%%:*}" # Everything before the colon
       version="${mod_spec#*:}" # Everything after the colon
     else
-      mod_id="$mod_spec"
+      mod_string_id="$mod_spec"
       version=""
     fi
 
-    download_and_install_mod "$mod_id" "$version"
-  done <<< "$MODS"
+    download_and_install_mod "$mod_string_id" "$version"
+  done
 }
 
 manage_mods() {
