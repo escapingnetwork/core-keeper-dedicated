@@ -4,8 +4,6 @@ source "${SCRIPTSDIR}/helper-functions.sh"
 MODS_MANIFEST="${MODSDIR}/.manifest"
 MODIO_CORE_KEEPER_ENDPOINT="${MODIO_API_URL}/games/@corekeeper/mods"
 
-mkdir -p "${MODSDIR}"
-
 download_and_install_mod() {
   if [ -z "${MODIO_API_KEY}" ]; then
     LogError "MODIO_API_KEY is required for downloading mods"
@@ -150,8 +148,12 @@ install_mods() {
 
 manage_mods() {
   if [[ "${MODS_ENABLED,,}" != "true" ]]; then
+    LogInfo "MODS_ENABLED is not true, skipping mod installation"
+    rm -rf "${MODSDIR}"
     return 0
   fi
+
+  mkdir -p "${MODSDIR}"
 
   if [ -z "${MODS}" ]; then
     LogWarn "MODS_ENABLED is true but there are no mods specified"

@@ -119,7 +119,7 @@ These are the arguments you can use to customize server behavior with default va
 The container supports automatically installing mods from [mod.io](https://mod.io/g/corekeeper).
 
 1. Get a mod.io API key from [mod.io/me/access](https://mod.io/me/access)
-  - You'll need the API path that is generated along with the key (e.g. https://u-*.modapi.io/v1)
+    - You'll need the API path that is generated along with the key (e.g. https://u-*.modapi.io/v1)
 2. Set the necessary environment variables in your `override.env` file (or in your `docker-compose.yml`)
   - `MODS_ENABLED=true`
   - `MODIO_API_KEY=your_api_key`
