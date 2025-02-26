@@ -1,7 +1,6 @@
 #!/bin/bash
 source "${SCRIPTSDIR}/helper-functions.sh"
 
-MODS_MANIFEST="${MODSDIR}/.manifest"
 MODIO_CORE_KEEPER_ENDPOINT="${MODIO_API_URL}/games/@corekeeper/mods"
 
 download_and_install_mod() {
@@ -66,15 +65,9 @@ download_and_install_mod() {
 
   # Download and extract mod
   if curl -s -L "${download_url}?api_key=${MODIO_API_KEY}" -o "${temp_mod_download}"; then
-    # Remove existing mod directory if it exists
-    rm -rf "${mod_dir}"
-
     # Create mod directory and extract
     mkdir -p "${mod_dir}"
     unzip -q "${temp_mod_download}" -d "${mod_dir}"
-
-    # Update manifest
-    echo "${mod_string_id}:${actual_version}" >> "${MODS_MANIFEST}.tmp"
     LogInfo "Installed ${mod_name} (${mod_string_id}) ${actual_version}"
   else
     LogError "Failed to install ${mod_name} (${mod_string_id}) ${actual_version}"
@@ -83,43 +76,6 @@ download_and_install_mod() {
 
   # Cleanup
   rm -rf "${temp_dir}"
-}
-
-cleanup_mods() {
-  local installed_mods=()
-  if [ -f "${MODS_MANIFEST}" ]; then
-    while IFS=: read -r mod_string_id _; do
-      installed_mods+=("$mod_string_id")
-    done < "${MODS_MANIFEST}"
-  fi
-
-  # Get list of current mod directories
-  for mod_dir in "${MODSDIR}"/*; do
-    if [ -d "$mod_dir" ]; then
-      local dir_name
-      dir_name=$(basename "$mod_dir")
-
-      # Skip if not a mod directory
-      if [[ "$dir_name" == "." || "$dir_name" == ".." || "$dir_name" == ".manifest" ]]; then
-        continue
-      fi
-
-      # Check if mod is in current manifest
-      local isInManifest=false
-      for mod in "${installed_mods[@]}"; do
-        if [ "$dir_name" == "$mod" ]; then
-          isInManifest=true
-          break
-        fi
-      done
-
-      # Remove if not in manifest
-      if [ "$isInManifest" == false ]; then
-        LogWarn "Removing unused mod: ${dir_name}"
-        rm -rf "$mod_dir"
-      fi
-    fi
-  done
 }
 
 install_mods() {
@@ -147,13 +103,14 @@ install_mods() {
 }
 
 manage_mods() {
+  # We always clear the mods directory so the installed mods reflect exactly what was specified by the user
+  rm -rf "${MODSDIR}"
+  mkdir -p "${MODSDIR}"
+
   if [[ "${MODS_ENABLED,,}" != "true" ]]; then
     LogInfo "MODS_ENABLED is not true, skipping mod installation"
-    rm -rf "${MODSDIR}"
     return 0
   fi
-
-  mkdir -p "${MODSDIR}"
 
   if [ -z "${MODS}" ]; then
     LogWarn "MODS_ENABLED is true but there are no mods specified"
@@ -161,16 +118,5 @@ manage_mods() {
   fi
 
   LogInfo "Installing mods..."
-
-  # Create temporary manifest
-  rm -f "${MODS_MANIFEST}.tmp"
-  touch "${MODS_MANIFEST}.tmp"
-
   install_mods
-
-  # Replace old manifest with new one
-  mv "${MODS_MANIFEST}.tmp" "${MODS_MANIFEST}"
-
-  # Cleanup unused mods
-  cleanup_mods
 }
