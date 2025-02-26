@@ -151,7 +151,8 @@ Example using specific versions:
 MODS=core-lib,coreliblocalization,corelibrewiredextension:3.0.1,ck-qol:1.9.4
 ```
 
-If `version` is not specified, the latest version will be installed.
+- If `version` is not specified, the latest version will be installed.
+- Mods are reinstalled whenever the container is started, so to update mods to their latest version, simply restart the container.
 
 ### Contributors
 <a href="https://github.com/escapingnetwork/core-keeper-dedicated/graphs/contributors">
