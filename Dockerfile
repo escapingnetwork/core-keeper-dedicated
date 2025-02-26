@@ -15,7 +15,7 @@ ENV STEAMAPP=core-keeper
 ENV STEAMAPPDIR="${HOMEDIR}/${STEAMAPP}-dedicated"
 ENV STEAMAPPDATADIR="${HOMEDIR}/${STEAMAPP}-data"
 ENV SCRIPTSDIR="${HOMEDIR}/scripts"
-ENV MODSDIR="${STEAMAPPDATADIR}/StreamingAssets/Mods"
+ENV MODSDIR="${STEAMAPPDIR}/CoreKeeperServer_Data/StreamingAssets/Mods"
 ENV DLURL=https://raw.githubusercontent.com/escapingnetwork/core-keeper-dedicated
 
 ARG TARGETARCH
@@ -33,6 +33,7 @@ RUN set -x \
         tzdata \
         gosu \
         jo \
+        jq \
         gettext-base \
         unzip \
 	wget \
@@ -126,7 +127,12 @@ ENV PUID=1000 \
     DISCORD_SERVER_STOP_ENABLED=true \
     DISCORD_SERVER_STOP_MESSAGE="" \
     DISCORD_SERVER_STOP_TITLE="Server Stopped" \
-    DISCORD_SERVER_STOP_COLOR="12779520"
+    DISCORD_SERVER_STOP_COLOR="12779520" \
+    # Mods
+    MODS_ENABLED=false \
+    MODIO_API_KEY="" \
+    MODIO_API_URL="" \
+    MODS=""
 
 # Switch to workdir
 WORKDIR ${HOMEDIR}
