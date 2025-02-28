@@ -6,7 +6,7 @@ MODIO_CORE_KEEPER_ENDPOINT="${MODIO_API_URL}/games/@corekeeper/mods"
 download_and_install_mod() {
   if [ -z "${MODIO_API_KEY}" ]; then
     LogError "MODIO_API_KEY is required for downloading mods"
-    return 1
+    exit 1
   fi
 
   local mod_string_id="$1"
@@ -22,7 +22,7 @@ download_and_install_mod() {
 
   if [ -z "$mod_info" ]; then
     LogError "Failed to get mod info for mod ${mod_string_id}"
-    return 1
+    exit 1
   fi
 
   local mod_name
@@ -35,14 +35,14 @@ download_and_install_mod() {
 
     if [ -z "$mod_files" ]; then
       LogError "Failed to get mod files for ${mod_name} (${mod_string_id})"
-      return 1
+      exit 1
     fi
 
     # Find the specified version
     download_url=$(echo "$mod_files" | jq -r ".data[] | select(.version == \"${version}\") | .download.binary_url")
     if [ -z "$download_url" ] || [ "$download_url" = "null" ]; then
       LogError "Version ${version} not found for mod ${mod_name} (${mod_string_id})"
-      return 1
+      exit 1
     fi
     actual_version="$version"
   else
@@ -53,7 +53,7 @@ download_and_install_mod() {
 
   if [ -z "$download_url" ] || [ "$download_url" = "null" ]; then
     LogError "Failed to get download URL for mod ${mod_name} (${mod_string_id})"
-    return 1
+    exit 1
   fi
 
   # Create temp directory for download
@@ -71,7 +71,7 @@ download_and_install_mod() {
     LogInfo "Installed ${mod_name} (${mod_string_id}) ${actual_version}"
   else
     LogError "Failed to install ${mod_name} (${mod_string_id}) ${actual_version}"
-    return 1
+    exit 1
   fi
 
   # Cleanup
