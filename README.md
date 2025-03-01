@@ -59,7 +59,7 @@ volumes:
     server-data:
 ```
 
-Create a `override.env` file and override the desired enviromental variables for the dedicated server, see configuration for reference. Example:
+Create a `override.env` file and override the desired environmental variables for the dedicated server, see configuration for reference. Example:
 ```env
 ARM64_DEVICE=rpi5
 MAX_PLAYERS=3
@@ -81,7 +81,7 @@ These are the arguments you can use to customize server behavior with default va
 | PUID | 1000 | The user ID on the host that the container should use for file ownership and permissions. |
 | PGID | 1000 | The group ID on the host that the container should use for file ownership and permissions. |
 | ARM64_DEVICE | generic | The Box64 build variants. Accepts `generic`, `rpi5`, `m1` and `adlink`. |
-| USE_DEPOT_DOWNLOADER | false | Use Depot downloader instead of steamcmd. Useful for system not compatible with 32 bits. | 
+| USE_DEPOT_DOWNLOADER | false | Use Depot downloader instead of steamcmd. Useful for system not compatible with 32 bits. |
 | WORLD_INDEX | 0 | Which world index to use. |
 | WORLD_NAME | "Core Keeper Server" | The name to use for the server. |
 | WORLD_SEED | "" | The seed to use for a new world. Set to "" to generate random seed. |
@@ -109,8 +109,51 @@ These are the arguments you can use to customize server behavior with default va
 | DISCORD_SERVER_STOP_MESSAGE | "" | Embed message |
 | DISCORD_SERVER_STOP_TITLE | "Server Stopped" | Embed title |
 | DISCORD_SERVER_STOP_COLOR | "12779520" | Embed color |
+| MODS_ENABLED | false | Enable/Disable mod support |
+| MODIO_API_KEY | "" | mod.io API key |
+| MODIO_API_URL | "" | mod.io API path |
+| MODS | "" | List of mods to install |
 
-                          
+## Mod Support
+
+The container supports automatically installing mods from [mod.io](https://mod.io/g/corekeeper).
+
+1. Get a mod.io API key from [mod.io/me/access](https://mod.io/me/access)
+    - You'll need the API path that is generated along with the key (e.g. https://u-*.modapi.io/v1)
+2. Set the necessary environment variables in your `override.env` file (or in your `docker-compose.yml`)
+  - `MODS_ENABLED=true`
+  - `MODIO_API_KEY=your_api_key`
+  - `MODIO_API_URL=your_api_url`
+  - `MODS=mod1,mod2` (see below)
+
+### Specify mods to install
+
+> [!WARNING]
+> Installing a client-only mod can cause the server to not start. Don't install client-only mods (they wouldn't do anything on the server anyway).
+
+> [!IMPORTANT]
+> Mod dependencies are not automatically installed. You must look at the dependencies for each mod you want to install and add their dependencies to the list.
+
+You'll need to get the mod string ID from mod.io for each mod you want to install. The easiest way to do this is to grab it from the URL.
+
+For example, looking at the URL for [CoreLib](https://mod.io/g/corekeeper/m/core-lib) (`https://mod.io/g/corekeeper/m/core-lib`), you would use `core-lib`.
+
+Specify mods as a comma-separated list, optionally providing a version:
+
+```sh
+# Format: <mod_id>[:<version>], ...
+MODS=core-lib,coreliblocalization,corelibrewiredextension,ck-qol
+```
+
+Example using specific versions:
+
+```sh
+MODS=core-lib,coreliblocalization,corelibrewiredextension:3.0.1,ck-qol:1.9.4
+```
+
+- If `version` is not specified, the latest version will be installed.
+- Mods are reinstalled whenever the container is started, so to update mods to their latest version, simply restart the container.
+
 ### Contributors
 <a href="https://github.com/escapingnetwork/core-keeper-dedicated/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=escapingnetwork/core-keeper-dedicated" />

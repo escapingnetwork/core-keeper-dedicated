@@ -13,5 +13,5 @@ services:
     restart: unless-stopped
     stop_grace_period: 2m
 volumes:
-    server-files:
-    server-data:
+  server-files:
+  server-data:

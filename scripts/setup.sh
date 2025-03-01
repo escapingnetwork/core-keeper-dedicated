@@ -1,4 +1,7 @@
 #!/bin/bash
+
+source "${SCRIPTSDIR}/mod-manager.sh"
+
 mkdir -p "${STEAMAPPDIR}" || true
 
 # Initialize arguments array
@@ -28,5 +31,7 @@ if [ "${USE_DEPOT_DOWNLOADER}" == true ]; then
 else
     "$STEAMCMDDIR/steamcmd.sh" "${args[@]}"
 fi
+
+manage_mods
 
 exec bash "${SCRIPTSDIR}/launch.sh"
