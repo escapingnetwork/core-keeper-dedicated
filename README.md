@@ -114,7 +114,7 @@ These are the arguments you can use to customize server behavior with default va
 | MODIO_API_KEY | "" | mod.io API key |
 | MODIO_API_URL | "" | mod.io API path |
 | MODS | "" | List of mods to install |
-| ACTIVATE_CONTENT | "" | Comma separated list to turn on biomes for worlds created prior to v1.1. Valid values are `GiantCicadaBossDungeon`,`NatureBiomeCicadas`,and `GuaranteedOases`. Once enabled, they cannot be disabled! |
+| ACTIVATE_CONTENT | "" | Comma separated list to turn on biomes for worlds created prior to v1.1. Valid values are `GiantCicadaBossDungeon`, `NatureBiomeCicadas`, `GuaranteedOases`, and `AbioticFactor`. Once enabled, they cannot be disabled! |
 
 ## Mod Support
 
