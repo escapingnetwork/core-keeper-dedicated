@@ -2,8 +2,9 @@ services:
   core-keeper:
     container_name: core-keeper-dedicated
     image: escaping/core-keeper-dedicated
-    ports:
-      - "$SERVER_PORT:$SERVER_PORT/udp"
+    # Port is only needed if using direct connect mode
+    # ports:
+    #   - "$SERVER_PORT:$SERVER_PORT/udp"
     volumes:
       - server-files:/home/steam/core-keeper-dedicated
       - server-data:/home/steam/core-keeper-data

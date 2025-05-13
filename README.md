@@ -89,10 +89,9 @@ These are the arguments you can use to customize server behavior with default va
 | WORLD_MODE | 0 | Sets the world mode for the world. Can be Normal (0), Hard (1), Creative (2), Casual (4). |
 | SEASON | No Default | Overrides current season by setting to any of None (0), Easter (1), Halloween (2), Christmas (3), Valentine (4), Anniversary (5), CherryBlossom (6), LunarNewYear(7).<br/>**Do not set this env var if you want real date season.** |
 | GAME_ID | "" |  Game ID to use for the server. Need to be at least 28 characters and alphanumeric, excluding Y,y,x,0,O. Empty or not valid means a new ID will be generated at start. |
-| DATA_PATH | "/home/steam/core-keeper-data" | Save file location. |
 | MAX_PLAYERS | 10 | Maximum number of players that will be allowed to connect to server. |
 | SERVER_IP | No Default | Only used if port is set. Sets the address that the server will bind to. |
-| SERVER_PORT | 27015 | What port to bind to. 27015 is the Steam relay port. |
+| SERVER_PORT | No Default | Port used for direct connection mode. **Setting an value to this will cause the server behaviour to change!** [See Network Mode](#network-mode) |
 | DISCORD_WEBHOOK_URL | "" | Webhook url (Edit channel > Integrations > Create Webhook). |
 | DISCORD_PLAYER_JOIN_ENABLED | true | Enable/Disable message on player join |
 | DISCORD_PLAYER_JOIN_MESSAGE | `"$${char_name} ($${steamid}) has joined the server."` | Embed message |
@@ -155,6 +154,26 @@ MODS=core-lib,coreliblocalization,corelibrewiredextension:3.0.1,ck-qol:1.9.4
 
 - If `version` is not specified, the latest version will be installed.
 - Mods are reinstalled whenever the container is started, so to update mods to their latest version, simply restart the container.
+
+## Network Mode
+
+Currently Core Keeper supports two network modes: SDR (Steam Datagram Relay) and Direct Connect.
+
+### SDR (Steam Datagram Relay)
+In this mode, the server uses [Valve's Virtual Network](https://partner.steamgames.com/doc/features/multiplayer/steamdatagramrelay) to route traffic through Steam's relay infrastructure. Instead of players connecting directly to the server's IP address, all communication goes through secure relay nodes managed by Steam. This hides the server’s real IP, protects against DDoS attacks, and improves NAT traversal.
+
+Because of this relay system, server operators do not need to open any ports on their router or firewall—as long as outbound connections to Steam are allowed, the server can communicate with clients reliably.
+
+### Direct Connection
+In Direct Connect mode, players connect straight to the server’s public IP address without going through Steam's relay network. This can result in lower latency and more direct communication, but it requires the server to be reachable from the internet.
+
+Server operators must open and forward the necessary ports on their router or firewall to allow incoming connections. Unlike SDR, this mode exposes the server’s IP address to clients and may be more vulnerable to connection issues or attacks.
+
+> [!IMPORTANT]<br>
+> The SERVER_PORT environment variable determines the server's network mode.<br>
+> Leave it empty to use SDR (no port forwarding needed).<br>
+> Setting a value switches to Direct Connect, which requires opening and forwarding ports.<br>
+> Only set this if you specifically want Direct Connect.
 
 ### Contributors
 <a href="https://github.com/escapingnetwork/core-keeper-dedicated/graphs/contributors">
