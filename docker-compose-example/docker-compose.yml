@@ -1,18 +1,15 @@
 services:
   core-keeper:
+    image: escaping/core-keeper-dedicated:latest
     container_name: core-keeper-dedicated
-    image: escaping/core-keeper-dedicated
-    # Port is only needed if using direct connect mode
+    restart: unless-stopped
+    stop_grace_period: 2m
+    # Port is only needed if using direct connection mode
     # ports:
     #   - "$SERVER_PORT:$SERVER_PORT/udp"
     volumes:
-      - server-files:/home/steam/core-keeper-dedicated
-      - server-data:/home/steam/core-keeper-data
+      - /host/path/to/server-files:/home/steam/core-keeper-dedicated
+      - /host/path/to/server-data:/home/steam/core-keeper-data
     env_file:
-      - path: override.env
+      - path: core.env
         required: false
-    restart: unless-stopped
-    stop_grace_period: 2m
-volumes:
-  server-files:
-  server-data:

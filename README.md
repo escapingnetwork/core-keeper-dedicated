@@ -7,7 +7,7 @@ Explore an endless cavern of creatures, relics and resources in a mining sandbox
 [![Docker Image CI](https://github.com/escapingnetwork/core-keeper-dedicated/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/escapingnetwork/core-keeper-dedicated/actions/workflows/docker-image.yml)
 
 ## Supported tags and respective `Dockerfile` links
--	[`latest` (*Dockerfile*)](https://github.com/escapingnetwork/core-keeper-dedicated/blob/main/Dockerfile)
+-	[`latest` (*Dockerfile*)](./Dockerfile)
 
 ## How to run
 
@@ -32,45 +32,53 @@ Create two directories where you want to run your server :
 - `server-data`: mandatory if you want to keep configuration between each restart
 - `server-files`: optional, contains all the files of the application
 
+Then modify `/host/path/to/server-data` and/or `/host/path/to/server-files` in one of the examples below to match the paths of the folders you created.
+
 ### Using Docker CLI:
 
-`docker run -d -e WORLD_NAME="Core Keeper Server" -e MAX_PLAYERS=5 -p 27015:27015/udp -v $(pwd)/server-data:/home/steam/core-keeper-data --name core-keeper-dedicated escaping/core-keeper-dedicated`
+```bash
+docker run -d \
+  --name core-keeper-dedicated \
+  -e WORLD_NAME="Core Keeper Server" \
+  -e MAX_PLAYERS=5 \
+  -v /host/path/to/server-data:/home/steam/core-keeper-data \
+  -v /host/path/to/server-files:/home/steam/core-keeper-dedicated \
+  escaping/core-keeper-dedicated:latest
+```
 
 ### Using Docker Compose
-Create a `docker-compose.yml` with the following content:
+Create a [`docker-compose.yml`](./docker-compose-example/docker-compose.yml) with the following content:
 
 ```yml
 services:
   core-keeper:
+    image: escaping/core-keeper-dedicated:latest
     container_name: core-keeper-dedicated
-    image: escaping/core-keeper-dedicated
-    ports:
-      - "$SERVER_PORT:$SERVER_PORT/udp"
-    volumes:
-      - server-files:/home/steam/core-keeper-dedicated
-      - server-data:/home/steam/core-keeper-data
     restart: unless-stopped
-    env_file:
-      - path: override.env
-        required: false
     stop_grace_period: 2m
-volumes:
-    server-files:
-    server-data:
+    # Port is only needed if using direct connection mode
+    # ports:
+    #   - "$SERVER_PORT:$SERVER_PORT/udp"
+    volumes:
+      - /host/path/to/server-files:/home/steam/core-keeper-dedicated
+      - /host/path/to/server-data:/home/steam/core-keeper-data
+    env_file:
+      - path: core.env
+        required: false
 ```
 
-Create a `override.env` file and override the desired environmental variables for the dedicated server, see configuration for reference. Example:
+Create a `core.env` file and override the desired environmental variables for the dedicated server, see configuration for reference. Example:
 ```env
 ARM64_DEVICE=rpi5
 MAX_PLAYERS=3
 ```
 
-On the folder which contains the files run `docker-compose up -d`.
+On the folder which contains the files run `docker compose up -d`.
 
-A `GameID.txt` file will be created next to the executable containing the Game ID. If it doesn't appear you can check the log in the same location named `core-keeper-dedicated/CoreKeeperServerLog.txt` for errors.
+A `GameID.txt` file will be created next to the executable containing the Game ID. If it doesn't appear you can check the docker logs (`docker logs core-keeper-dedicated` or `docker compose logs`) for errors.
 
 To query the game ID run:
-`docker exec -it core-keeper-dedicated cat core-keeper-dedicated/GameID.txt`
+`docker exec -it core-keeper-dedicated cat /home/steam/core-keeper-dedicated/GameID.txt`
 
 ## Configuration
 
@@ -121,7 +129,7 @@ The container supports automatically installing mods from [mod.io](https://mod.i
 
 1. Get a mod.io API key from [mod.io/me/access](https://mod.io/me/access)
     - You'll need the API path that is generated along with the key (e.g. https://u-*.modapi.io/v1)
-2. Set the necessary environment variables in your `override.env` file (or in your `docker-compose.yml`)
+2. Set the necessary environment variables in your `core.env` file (or in your `docker-compose.yml`)
   - `MODS_ENABLED=true`
   - `MODIO_API_KEY=your_api_key`
   - `MODIO_API_URL=your_api_url`
