@@ -16,7 +16,7 @@ LogParser() {
             # Store character name for future use
             characters[$steamid]=$char_name
 
-            [[ "${DISCORD_PLAYER_JOIN_ENABLED,,}" == false ]] && return 0
+            [[ "${DISCORD_PLAYER_JOIN_ENABLED,,}" == false ]] && continue
 
             # Build message from vars and send message
             message=$(char_name="$char_name" steamid="$steamid" envsubst <<<"$DISCORD_PLAYER_JOIN_MESSAGE")
@@ -24,7 +24,7 @@ LogParser() {
         fi
 
         if [[ "$line" == *"Disconnected from userid:"* ]]; then
-            [[ "${DISCORD_PLAYER_LEAVE_ENABLED,,}" == false ]] && return 0
+            [[ "${DISCORD_PLAYER_LEAVE_ENABLED,,}" == false ]] && continue
 
             # Extract steamid and reason
             steamid=$(echo "$line" | awk -F'[ :]+' '{print $4}')
@@ -38,7 +38,7 @@ LogParser() {
         fi
 
         if [[ "$line" == "Started session with Game ID "* ]]; then
-            [[ "${DISCORD_SERVER_START_ENABLED,,}" == false ]] && return 0
+            [[ "${DISCORD_SERVER_START_ENABLED,,}" == false ]] && continue
 
             # Extract Game ID
             gameid=$(echo "$line" | awk '{print $6}')
