@@ -37,11 +37,11 @@ LogParser() {
             SendDiscordMessage "$DISCORD_PLAYER_LEAVE_TITLE" "$message" "$DISCORD_PLAYER_LEAVE_COLOR"
         fi
 
-        if [[ "$line" == "Started session with Game ID "* ]]; then
+        if [[ "$line" == "Started session with info: "* ]]; then
             [[ "${DISCORD_SERVER_START_ENABLED,,}" == false ]] && continue
 
             # Extract Game ID
-            gameid=$(echo "$line" | awk '{print $6}')
+            gameid=$(echo "$line" | awk '{print $5}')
 
             # Build message from vars and send message
             message=$(world_name="$WORLD_NAME" gameid="$gameid" envsubst <<<"$DISCORD_SERVER_START_MESSAGE")
