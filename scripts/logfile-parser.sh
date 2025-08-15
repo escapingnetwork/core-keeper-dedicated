@@ -37,7 +37,7 @@ LogParser() {
             SendDiscordMessage "$DISCORD_PLAYER_LEAVE_TITLE" "$message" "$DISCORD_PLAYER_LEAVE_COLOR"
         fi
 
-        if [[ "$line" == "World creation version is"* ]]; then
+        if [[ "$line" == "Started session with info: "* ]]; then
             [[ "${DISCORD_SERVER_START_ENABLED,,}" == false ]] && continue
 
             game_info="${STEAMAPPDIR}/GameInfo.txt"
