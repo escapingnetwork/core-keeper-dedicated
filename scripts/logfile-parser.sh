@@ -37,41 +37,61 @@ LogParser() {
             SendDiscordMessage "$DISCORD_PLAYER_LEAVE_TITLE" "$message" "$DISCORD_PLAYER_LEAVE_COLOR"
         fi
 
-        if [[ "$line" == "World creation version is"* ]]; then
+        if [[ "$line" == "Started session with info: "* ]]; then
             [[ "${DISCORD_SERVER_START_ENABLED,,}" == false ]] && continue
 
             game_info="${STEAMAPPDIR}/GameInfo.txt"
+            game_info_timeout=5
+            game_info_count=0
 
-            read -r gameid \
-                    allowed_platforms \
-                    public_ip \
-                    port \
-                    password \
-                    join_string < <(
-              awk -F': ' '
-                BEGIN { gameid=""; allowed_platforms=""; public_ip=""; port=""; password=""; join_string="" }
-                /^GameID:/ { gameid=$2 }
-                /^Allowed platforms:/ { allowed_platforms=$2 }
-                /^Public IP:/ { public_ip=$2 }
-                /^Port:/ { port=$2 }
-                /^Password:/ { password=$2 }
-                /^Paste to ip-field/ { if (getline) join_string=$0 }
-                END { print gameid, allowed_platforms, public_ip, port, password, join_string }
-              ' "$game_info"
-            )
+            LogDebug "Detecting file $game_info (max $game_info_timeout seconds)..."
 
-            # Build message from vars and send message
-            message=$(
-                world_name="$WORLD_NAME" \
-                gameid="$gameid" \
-                allowed_platforms="$allowed_platforms" \
-                public_ip="$public_ip" \
-                port="$port" \
-                password="$password" \
-                join_string="$join_string" \
-                envsubst <<<"$DISCORD_SERVER_START_MESSAGE"
-            )
-            SendDiscordMessage "$DISCORD_SERVER_START_TITLE" "$message" "$DISCORD_SERVER_START_COLOR"
+            # GameInfo.txt creation can happen shortly after the log line appears
+            until [[ -f "$game_info" ]] || [ "$game_info_count" -ge "$game_info_timeout" ]; do
+                sleep 1
+                ((game_info_count++))
+            done
+
+            if [[ ! -f "$game_info" ]]; then
+                LogDebug "Failed to detect file $game_info after $game_info_timeout seconds"
+            else
+
+                LogDebug "Detected file $game_info, sending discord server start message"
+
+                read -r gameid \
+                        allowed_platforms \
+                        public_ip \
+                        port \
+                        password  < <(
+                    awk -F': ' '
+                      BEGIN { gameid=""; allowed_platforms=""; public_ip=""; port=""; password=""; }
+                      /^GameID:/ { gameid=$2 }
+                      /^Allowed platforms:/ { allowed_platforms=$2 }
+                      /^Public IP:/ { public_ip=$2 }
+                      /^Port:/ { port=$2 }
+                      /^Password:/ { password=$2 }
+                      END { print gameid, allowed_platforms, public_ip, port, password }
+                    ' "$game_info"
+                )
+
+                if [[ -n "$port" ]]; then # Port will be set in Direct Connection and is empty in Steam Datagram Relay
+                    join_string="${public_ip}:${port}::${password}"
+                fi
+
+                # Build message from vars and send message
+                message=$(
+                    world_name="$WORLD_NAME" \
+                    gameid="$gameid" \
+                    allowed_platforms="$allowed_platforms" \
+                    public_ip="$public_ip" \
+                    port="$port" \
+                    password="$password" \
+                    join_string="$join_string" \
+                    envsubst <<<"$DISCORD_SERVER_START_MESSAGE"
+                )
+
+                SendDiscordMessage "$DISCORD_SERVER_START_TITLE" "$message" "$DISCORD_SERVER_START_COLOR"
+            fi
         fi
     done
 }
