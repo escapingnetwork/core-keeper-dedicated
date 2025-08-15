@@ -110,7 +110,7 @@ These are the arguments you can use to customize server behavior with default va
 | DISCORD_PLAYER_LEAVE_TITLE | "Player Left" | Embed title |
 | DISCORD_PLAYER_LEAVE_COLOR | "11477760" | Embed color |
 | DISCORD_SERVER_START_ENABLED | true | Enable/Disable message on server start |
-| DISCORD_SERVER_START_MESSAGE | `"**World:** $${world_name}\n**GameID:** $${gameid}"` | Embed message |
+| DISCORD_SERVER_START_MESSAGE | `"**World:** $${world_name}\n**GameID:** $${gameid}"` | Embed message. Available variables are `world_name`, `gameid`, (the following only in direct connection mode) `allowed_platforms`, `public_ip`, `port`, `password`, `join_string`|
 | DISCORD_SERVER_START_TITLE | "Server Started" | Embed title |
 | DISCORD_SERVER_START_COLOR | "2013440" | Embed color |
 | DISCORD_SERVER_STOP_ENABLED | true | Enable/Disable message on server stop |
