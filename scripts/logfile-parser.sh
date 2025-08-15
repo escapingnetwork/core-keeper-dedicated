@@ -40,11 +40,37 @@ LogParser() {
         if [[ "$line" == "Started session with info: "* ]]; then
             [[ "${DISCORD_SERVER_START_ENABLED,,}" == false ]] && continue
 
-            # Extract Game ID
-            gameid=$(echo "$line" | awk '{print $5}')
+            game_info="${STEAMAPPDIR}/GameInfo.txt"
+
+            read -r gameid \
+                    allowed_platforms \
+                    public_ip \
+                    port \
+                    password \
+                    join_string < <(
+              awk -F': ' '
+                BEGIN { gameid=""; allowed_platforms=""; public_ip=""; port=""; password=""; join_string="" }
+                /^GameID:/ { gameid=$2 }
+                /^Allowed platforms:/ { allowed_platforms=$2 }
+                /^Public IP:/ { public_ip=$2 }
+                /^Port:/ { port=$2 }
+                /^Password:/ { password=$2 }
+                /^Paste to ip-field/ { if (getline) join_string=$0 }
+                END { print gameid, allowed_platforms, public_ip, port, password, join_string }
+              ' "$game_info"
+            )
 
             # Build message from vars and send message
-            message=$(world_name="$WORLD_NAME" gameid="$gameid" envsubst <<<"$DISCORD_SERVER_START_MESSAGE")
+            message=$(
+                world_name="$WORLD_NAME" \
+                gameid="$gameid" \
+                allowed_platforms="$allowed_platforms" \
+                public_ip="$public_ip" \
+                port="$port" \
+                password="$password" \
+                join_string="$join_string" \
+                envsubst <<<"$DISCORD_SERVER_START_MESSAGE"
+            )
             SendDiscordMessage "$DISCORD_SERVER_START_TITLE" "$message" "$DISCORD_SERVER_START_COLOR"
         fi
     done
