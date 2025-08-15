@@ -107,6 +107,8 @@ ENV PUID=1000 \
     SEASON="" \
     SERVER_IP="" \
     SERVER_PORT="" \
+    PASSWORD="" \
+    ALLOW_ONLY_PLATFORM="" \
     DISCORD_WEBHOOK_URL="" \
     # Player Join
     DISCORD_PLAYER_JOIN_ENABLED=true \
