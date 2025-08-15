@@ -101,7 +101,7 @@ These are the arguments you can use to customize server behavior with default va
 | SERVER_IP | No Default | Only used if port is set. Sets the address that the server will bind to. |
 | SERVER_PORT | No Default | Port used for direct connection mode. **Setting an value to this will cause the server behaviour to change!** [See Network Mode](#network-mode) |
 | PASSWORD | No Default | Password players should use when trying to join using direct connections. Maximum length password can be 28 characters. If omitted or invalid, a random password will be generated.|
-| ALLOW_ONLY_PLATFORM | No Default | Allow only players from given platform. If not set all platform are allowed. Has no effect unless -port is also set enabling Direct Connections. Can be Steam (1), Epic (2), Microsoft (3), GOG (4). |
+| ALLOW_ONLY_PLATFORM | No Default | Allow only players from given platform. If not set all platforms are allowed. Has no effect unless -port is also set enabling Direct Connections. Can be Steam (1), Epic (2), Microsoft (3), GOG (4). |
 | DISCORD_WEBHOOK_URL | "" | Webhook url (Edit channel > Integrations > Create Webhook). |
 | DISCORD_PLAYER_JOIN_ENABLED | true | Enable/Disable message on player join |
 | DISCORD_PLAYER_JOIN_MESSAGE | `"$${char_name} ($${steamid}) has joined the server."` | Embed message |
