@@ -33,7 +33,7 @@ add_param "-season"     "${SEASON}"
 add_param "-ip"         "${SERVER_IP}"
 add_param "-port"       "${SERVER_PORT}"
 add_param "-activatecontent" "${ACTIVATE_CONTENT}"
-add_param "-password" "${PASSWORD}"
+add_param "-password"   "${PASSWORD}"
 add_param "-allowonlyplatform" "${ALLOW_ONLY_PLATFORM}"
 
 echo "${params[@]}"
