@@ -120,7 +120,7 @@ ENV PUID=1000 \
     DISCORD_PLAYER_LEAVE_COLOR="11477760" \
     # Server Start
     DISCORD_SERVER_START_ENABLED=true \
-    DISCORD_SERVER_START_MESSAGE='**World:** ${world_name}\n**GameID:** ${gameid}' \
+    DISCORD_SERVER_START_MESSAGE="" \
     DISCORD_SERVER_START_TITLE="Server Started" \
     DISCORD_SERVER_START_COLOR="2013440" \
     # Server Stop

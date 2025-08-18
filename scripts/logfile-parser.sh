@@ -84,6 +84,14 @@ sendServerStartMessage() {
             join_string="${public_ip}:${port}::${password}"
         fi
 
+        if [[ -n "$DISCORD_SERVER_START_MESSAGE" ]]; then
+          start_message_template="$DISCORD_SERVER_START_MESSAGE"
+        elif [[ -n "$port" ]]; then
+          start_message_template='**World:** ${world_name}\n**GameID:** ${gameid}\n**Allowed Platforms:** ${allowed_platforms}\n**Server IP:** ${public_ip}\n**Port:** ${port}\n**Password:** ${password}\n**Join String:** ${join_string}'
+        else
+          start_message_template='**World:** ${world_name}\n**GameID:** ${gameid}'
+        fi
+
         # Build message from vars and send message
         message=$(
             world_name="$WORLD_NAME" \
@@ -93,7 +101,7 @@ sendServerStartMessage() {
             port="$port" \
             password="$password" \
             join_string="$join_string" \
-            envsubst <<<"$DISCORD_SERVER_START_MESSAGE"
+            envsubst <<<"$start_message_template"
         )
 
         SendDiscordMessage "$DISCORD_SERVER_START_TITLE" "$message" "$DISCORD_SERVER_START_COLOR"
