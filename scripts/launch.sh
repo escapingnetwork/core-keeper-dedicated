@@ -25,6 +25,7 @@ function kill_corekeeperserver {
 trap kill_corekeeperserver EXIT
 
 if [ -f "GameID.txt" ]; then rm GameID.txt; fi
+if [ -f "GameInfo.txt" ]; then rm GameInfo.txt; fi
 
 # Compile Parameters
 # Populates `params` array with parameters.
