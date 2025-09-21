@@ -72,6 +72,7 @@ sendServerStartMessage() {
             awk -F': ' '
               BEGIN { gameid=""; allowed_platforms=""; public_ip=""; port=""; password=""; }
               /^GameID:/ { gameid=$2 }
+              /^Steam GameID:/ { gameid=$2 }
               /^Allowed platforms:/ { allowed_platforms=$2 }
               /^Public IP:/ { public_ip=$2 }
               /^Port:/ { port=$2 }
