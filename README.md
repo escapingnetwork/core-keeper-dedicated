@@ -125,6 +125,7 @@ These are the arguments you can use to customize server behavior with default va
 | MODIO_API_KEY | "" | mod.io API key |
 | MODIO_API_URL | "" | mod.io API path |
 | MODS | "" | List of mods to install |
+
 ## Mod Support
 
 The container supports automatically installing mods from [mod.io](https://mod.io/g/corekeeper).
@@ -184,6 +185,58 @@ Server operators must open and forward the necessary ports on their router or fi
 > Leave it empty to use SDR (no port forwarding needed).<br>
 > Setting a value switches to Direct Connect, which requires opening and forwarding ports.<br>
 > Only set this if you specifically want Direct Connect.
+
+## Advanced ServerConfig Overrides
+
+By default, the image keeps the existing behavior and starts Core Keeper with command-line arguments built from environment variables. Most servers do not need to use this section.
+
+Set `OVERRIDE_SERVER_CONFIG=true` to additionally generate `/home/steam/core-keeper-data/ServerConfig.generated.json` on each container start and pass it to the server with `-serverconfig`. Use this only for server settings that Core Keeper does not expose as command-line arguments.
+
+| Argument | Default | Description |
+| :---: | :---: | :--- |
+| OVERRIDE_SERVER_CONFIG | false | Enables generated `ServerConfig.generated.json` support when set to `true`. |
+| MAX_NUMBER_PACKETS_SENT_PER_FRAME | No Default | Only used when `OVERRIDE_SERVER_CONFIG=true`. Sets `maxNumberPacketsSentPerFrame` in the generated `ServerConfig`. If unset, the generated config uses the game default of `1`. |
+| NETWORK_SEND_RATE | No Default | Only used when `OVERRIDE_SERVER_CONFIG=true`. Sets `networkSendRate` in the generated `ServerConfig`. If unset, the generated config uses the game default of `20`. |
+| CUSTOM_LAUNCH_PARAMS | "" | Appends extra launch arguments after the built-in container arguments. Intended for mod-specific or advanced server flags. |
+
+The generated file is rebuilt from environment variables every startup, so edit the environment variables instead of editing `ServerConfig.generated.json` by hand. Existing environment variables such as `WORLD_NAME`, `MAX_PLAYERS`, `PASSWORD`, and `SERVER_PORT` are still emitted as command-line arguments, so they continue to work with `OVERRIDE_SERVER_CONFIG=true`.
+
+### Network send tuning
+
+`MAX_NUMBER_PACKETS_SENT_PER_FRAME` controls how much snapshot data the server is allowed to send per frame. Raising it can help clients receive dense world areas faster, for example when many automation machines or tiles appear late after players move quickly into a base. Higher values can increase outbound bandwidth usage.
+
+> [!IMPORTANT]
+> In the dedicated server code, Core Keeper calculates the snapshot target size as `min(maxNumberPacketsSentPerFrame * 1200, 9440)` and applies it to Unity NetCode's `NetworkStreamSnapshotTargetSize`. This means values above `8` are unlikely to increase this specific snapshot budget further.
+
+Example values:
+
+| MAX_NUMBER_PACKETS_SENT_PER_FRAME | Approximate snapshot budget | Expected effect |
+| :---: | :---: | :--- |
+| 1 | 1200 bytes/frame | Game default. Lowest bandwidth, but dense areas may stream in slowly. |
+| 4 | 4800 bytes/frame | More world/object data can be sent each frame. Good first test for automation-heavy servers. |
+| 8 | 9440 bytes/frame | Near the observed server cap. Higher values are unlikely to increase this budget further. |
+
+`NETWORK_SEND_RATE` controls the server network tick rate. The game default is `20`, and values above the server simulation tick rate may be clamped by the game, so this is usually less useful than increasing `MAX_NUMBER_PACKETS_SENT_PER_FRAME`. Keep it at `20` unless you are specifically testing network tick behavior.
+
+For automation-heavy servers where tiles or machines appear late but player movement does not rubber-band, start with:
+
+```env
+OVERRIDE_SERVER_CONFIG=true
+MAX_NUMBER_PACKETS_SENT_PER_FRAME=4
+NETWORK_SEND_RATE=20
+```
+
+### Custom launch parameters
+
+Use `CUSTOM_LAUNCH_PARAMS` for additional dedicated server launch arguments that are not covered by the container's normal environment variables.
+
+```env
+CUSTOM_LAUNCH_PARAMS=-keepserverrunning
+CUSTOM_LAUNCH_PARAMS=-keepserverrunning -someflag -someparam value
+CUSTOM_LAUNCH_PARAMS=-someparam "value with spaces"
+```
+
+Standalone flags and `-flag value` pairs can be mixed in the same value. Single-quoted and double-quoted values are preserved as one argument. These arguments are appended after the container's built-in arguments, so use them only for settings that do not already have a dedicated environment variable above.
 
 ### Contributors
 <a href="https://github.com/escapingnetwork/core-keeper-dedicated/graphs/contributors">
