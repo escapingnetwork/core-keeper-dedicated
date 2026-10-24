@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source "${SCRIPTSDIR}/mod-manager.sh"
+source "${SCRIPTSDIR}/steam-mod-manager.sh"
 
 mkdir -p "${STEAMAPPDIR}" || true
 
@@ -33,5 +34,6 @@ else
 fi
 
 manage_mods
+manage_steam_mods
 
 exec bash "${SCRIPTSDIR}/launch.sh"

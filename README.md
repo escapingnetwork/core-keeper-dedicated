@@ -125,6 +125,7 @@ These are the arguments you can use to customize server behavior with default va
 | MODIO_API_KEY | "" | mod.io API key |
 | MODIO_API_URL | "" | mod.io API path |
 | MODS | "" | List of mods to install |
+| STEAM_WORKSHOP_MODS | "" | Comma-separated list of Steam Workshop mod ids to install |
 ## Mod Support
 
 The container supports automatically installing mods from [mod.io](https://mod.io/g/corekeeper).
@@ -164,6 +165,20 @@ MODS=core-lib,coreliblocalization,corelibrewiredextension:3.0.1,ck-qol:1.9.4
 
 - If `version` is not specified, the latest version will be installed.
 - Mods are reinstalled whenever the container is started, so to update mods to their latest version, simply restart the container.
+
+### Steam Workshop mods
+
+Mods can also be installed from the [Steam Workshop](https://steamcommunity.com/app/1621690/workshop/) via SteamCMD (anonymous login, no API key needed). This is independent of `MODS_ENABLED`.
+
+Use the numeric id from the workshop URL (e.g. `https://steamcommunity.com/sharedfiles/filedetails/?id=3673516180` → `3673516180`):
+
+```sh
+STEAM_WORKSHOP_MODS=3673516180,1234567890
+```
+
+- Items are downloaded to `steamapps/workshop/content/1621690/<id>` and every folder containing a `ModManifest.json` is copied into the server's `CoreKeeperServer_Data/StreamingAssets/Mods/<id>` folder.
+- Mods are re-checked on every container start; restart the container to pull workshop updates.
+- The same dependency and client-only warnings as above apply.
 
 ## Network Mode
 
