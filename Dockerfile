@@ -11,6 +11,7 @@ LABEL maintainer="leandro.martin@protonmail.com"
 
 ENV STEAMAPPID=1007
 ENV STEAMAPPID_TOOL=1963720
+ENV STEAM_WORKSHOP_APPID=1621690
 ENV STEAMAPP=core-keeper
 ENV STEAMAPPDIR="${HOMEDIR}/${STEAMAPP}-dedicated"
 ENV STEAMAPPDATADIR="${HOMEDIR}/${STEAMAPP}-data"
@@ -134,7 +135,8 @@ ENV PUID=1000 \
     MODS_ENABLED=false \
     MODIO_API_KEY="" \
     MODIO_API_URL="" \
-    MODS=""
+    MODS="" \
+    STEAM_WORKSHOP_MODS=""
 
 # Switch to workdir
 WORKDIR ${HOMEDIR}
